@@ -814,11 +814,13 @@ const DashboardLayout: React.FC = () => {
         onConfirm={() => fileInputRef.current?.click()}
       />
 
-      {/* Mobile Bottom Navigation (Liquid Glass Effect) */}
+      {/* Mobile Bottom Navigation (Ultra Premium Liquid Glass) */}
       <div className="lg:hidden fixed bottom-6 left-4 right-4 z-40 pb-safe">
-        <div className="bg-slate-900/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] shadow-blue-900/20 rounded-3xl px-6 py-2.5 flex items-center justify-between relative overflow-hidden">
-          {/* subtle inner glow */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent pointer-events-none rounded-3xl" />
+        <div className="bg-gradient-to-b from-slate-800/70 to-slate-950/80 backdrop-blur-[32px] border-t border-white/20 border-x border-white/10 border-b border-black/50 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.15)] rounded-[2rem] px-5 py-3 flex items-center justify-between relative overflow-hidden ring-1 ring-black/40">
+          {/* Glossy top highlight */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-70" />
+          {/* Liquid blue ambient glow inside the glass */}
+          <div className="absolute inset-x-0 -bottom-10 h-24 bg-blue-500/15 blur-2xl pointer-events-none" />
           
           {navItems.filter(item => ['dashboard', 'stok_ff', 'stok_ml', 'jurnal'].includes(item.id)).map(item => {
             const isActive = currentView === item.id;
@@ -826,18 +828,18 @@ const DashboardLayout: React.FC = () => {
               <button 
                 key={item.id}
                 onClick={() => setCurrentView(item.id as AppView)}
-                className="flex flex-col items-center justify-center gap-1 relative p-2 w-14"
+                className="flex flex-col items-center justify-center gap-1 relative p-2.5 w-[4.5rem] group"
               >
                 {isActive && (
                   <motion.div 
                     layoutId="active-bottom-nav"
-                    className="absolute inset-0 bg-blue-500/20 rounded-2xl"
+                    className="absolute inset-0 bg-gradient-to-b from-blue-500/25 to-indigo-600/10 border border-blue-400/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_0_15px_rgba(59,130,246,0.3)] rounded-2xl"
                     transition={{ type: "spring", stiffness: 400, damping: 25 }}
                   />
                 )}
-                <item.icon className={`w-5 h-5 relative z-10 transition-all duration-300 ${isActive ? 'text-blue-400 scale-110 drop-shadow-[0_0_8px_rgba(96,165,250,0.5)]' : 'text-slate-400 hover:text-slate-300 hover:-translate-y-0.5'}`} />
-                <span className={`text-[9px] relative z-10 font-bold transition-all duration-300 tracking-wide ${isActive ? 'text-blue-400 opacity-100' : 'text-slate-500 opacity-0 translate-y-2'}`}>
-                  {item.id === 'dashboard' ? 'Home' : item.id === 'stok_ff' ? 'Stok FF' : item.id === 'stok_ml' ? 'Stok ML' : 'Jurnal'}
+                <item.icon className={`w-5 h-5 relative z-10 transition-all duration-400 ease-out ${isActive ? 'text-white scale-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]' : 'text-slate-400/80 group-hover:text-slate-200 group-hover:-translate-y-0.5'}`} />
+                <span className={`text-[10px] relative z-10 font-black transition-all duration-400 ease-out tracking-wider ${isActive ? 'text-white opacity-100 drop-shadow-md' : 'text-slate-500/70 opacity-0 translate-y-2'}`}>
+                  {item.id === 'dashboard' ? 'HOME' : item.id === 'stok_ff' ? 'STOK FF' : item.id === 'stok_ml' ? 'STOK ML' : 'JURNAL'}
                 </span>
               </button>
             )
@@ -846,10 +848,10 @@ const DashboardLayout: React.FC = () => {
           {/* Menu / More Button */}
           <button 
             onClick={toggleSidebar}
-            className="flex flex-col items-center justify-center gap-1 relative p-2 w-14 group"
+            className="flex flex-col items-center justify-center gap-1 relative p-2.5 w-[4.5rem] group"
           >
-            <Menu className="w-5 h-5 text-slate-400 relative z-10 transition-all duration-300 group-hover:text-slate-300 group-hover:-translate-y-0.5" />
-            <span className="text-[9px] text-slate-500 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 relative z-10 font-bold transition-all duration-300 tracking-wide">Menu</span>
+            <Menu className="w-5 h-5 text-slate-400/80 relative z-10 transition-all duration-400 ease-out group-hover:text-slate-200 group-hover:-translate-y-0.5" />
+            <span className="text-[10px] text-slate-500/70 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 relative z-10 font-black transition-all duration-400 ease-out tracking-wider">MENU</span>
           </button>
         </div>
       </div>
