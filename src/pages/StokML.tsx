@@ -337,12 +337,12 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                 ))}
               </select>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 min-w-0 w-full">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tanggal Masuk (Opsional)</label>
               <input 
                 type="date" 
                 {...register('tanggalMasuk')}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
+                className="w-full min-w-0 appearance-none bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
               />
             </div>
           </div>
