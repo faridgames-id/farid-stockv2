@@ -328,7 +328,7 @@ const Dashboard: React.FC = () => {
                 </div>
                 
                 <div>
-                  <span className="text-2xl font-black text-white tracking-tight block mb-1.5">{card.value}</span>
+                  <span className="text-lg sm:text-xl lg:text-2xl font-black text-white tracking-tight block mb-1.5 truncate">{card.value}</span>
                   <p className="text-[10px] text-slate-500 flex items-center gap-1 font-medium">
                     <TrendingUp className="w-3 h-3 text-emerald-500" /> {card.subtitle}
                   </p>

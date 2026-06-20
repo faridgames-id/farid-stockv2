@@ -4,6 +4,7 @@ import gsap from 'gsap';
 
 interface SmoothScrollProps {
   children: React.ReactNode;
+  onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
 }
 
 /**
@@ -12,7 +13,7 @@ interface SmoothScrollProps {
  * Attaches Lenis to the parent scroll container.
  * Mobile: disabled → native OS scroll.
  */
-export default function SmoothScrollWrapper({ children }: SmoothScrollProps) {
+export default function SmoothScrollWrapper({ children, onScroll }: SmoothScrollProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
 
@@ -56,6 +57,7 @@ export default function SmoothScrollWrapper({ children }: SmoothScrollProps) {
   return (
     <div
       ref={containerRef}
+      onScroll={onScroll}
       className="absolute inset-0 overflow-y-auto overflow-x-hidden"
     >
       {children}

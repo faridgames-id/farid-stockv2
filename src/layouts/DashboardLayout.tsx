@@ -72,6 +72,20 @@ const DashboardLayout: React.FC = () => {
 
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
+  // Scroll state for hiding bottom nav
+  const [isScrollingDown, setIsScrollingDown] = useState(false);
+  const lastScrollY = React.useRef(0);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const currentScrollY = e.currentTarget.scrollTop;
+    if (currentScrollY > lastScrollY.current + 10 && currentScrollY > 50) {
+      setIsScrollingDown(true);
+    } else if (currentScrollY < lastScrollY.current - 10) {
+      setIsScrollingDown(false);
+    }
+    lastScrollY.current = currentScrollY;
+  };
+
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleExportData = () => {
@@ -713,7 +727,7 @@ const DashboardLayout: React.FC = () => {
  
         {/* Dynamic Page Content */}
         <main className="flex-1 relative overflow-hidden bg-slate-950">
-          <SmoothScrollWrapper>
+          <SmoothScrollWrapper onScroll={handleScroll}>
             <div className="p-4 lg:p-8 pb-32 lg:pb-12">
               <div className="max-w-[1600px] mx-auto w-full">
                 <AnimatePresence mode="wait">
@@ -809,7 +823,7 @@ const DashboardLayout: React.FC = () => {
       />
 
       {/* Mobile Bottom Navigation (Ultra Premium Liquid Glass) */}
-      <div className={`lg:hidden fixed bottom-6 left-4 right-4 z-40 pb-safe transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] ${sidebarOpen ? 'translate-y-40 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}>
+      <div className={`lg:hidden fixed bottom-6 left-4 right-4 z-40 pb-safe transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] ${(sidebarOpen || isScrollingDown) ? 'translate-y-40 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}>
         <div className="bg-gradient-to-b from-slate-800/70 to-slate-950/80 backdrop-blur-[32px] border-t border-white/20 border-x border-white/10 border-b border-black/50 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.15)] rounded-[2rem] px-5 py-3 flex items-center justify-between relative overflow-hidden ring-1 ring-black/40">
           {/* Glossy top highlight */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-70" />
