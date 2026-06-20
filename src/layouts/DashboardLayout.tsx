@@ -531,7 +531,7 @@ const DashboardLayout: React.FC = () => {
               
               {/* Time Filter */}
               <div className="flex flex-row items-center gap-2 w-full lg:w-auto">
-                <div className="relative flex items-center w-full lg:w-28">
+                <div className="relative flex items-center flex-1 lg:flex-none lg:w-28">
                   <select 
                     value={globalMonth}
                     onChange={(e) => setGlobalMonth(e.target.value)}
@@ -554,7 +554,7 @@ const DashboardLayout: React.FC = () => {
                   <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none" />
                 </div>
                 
-                <div className="relative flex items-center w-full lg:w-28">
+                <div className="relative flex items-center flex-1 lg:flex-none lg:w-28">
                   <select 
                     value={globalYear}
                     onChange={(e) => setGlobalYear(e.target.value)}
@@ -573,7 +573,7 @@ const DashboardLayout: React.FC = () => {
 
                 <button 
                   onClick={resetGlobalFilters}
-                  className="flex items-center justify-center gap-1.5 px-4 py-2.5 text-sm text-slate-300 hover:text-white bg-slate-800/50 hover:bg-slate-800 border border-slate-700/80 rounded-xl transition-all font-medium active:scale-95 group w-full lg:w-auto shrink-0"
+                  className="flex items-center justify-center gap-1.5 px-4 py-2.5 text-sm text-slate-300 hover:text-white bg-slate-800/50 hover:bg-slate-800 border border-slate-700/80 rounded-xl transition-all font-medium active:scale-95 group flex-none lg:w-auto"
                 >
                   <RefreshCw className="w-3.5 h-3.5 text-blue-400 transition-transform duration-300 group-hover:rotate-180" />
                   <span className="lg:hidden">Reset</span>
@@ -720,7 +720,7 @@ const DashboardLayout: React.FC = () => {
         {/* Dynamic Page Content */}
         <main className="flex-1 relative overflow-hidden bg-slate-950">
           <SmoothScrollWrapper>
-            <div className="p-4 lg:p-8 pb-24">
+            <div className="p-4 lg:p-8 pb-32 lg:pb-12">
               <div className="max-w-[1600px] mx-auto w-full">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -813,6 +813,46 @@ const DashboardLayout: React.FC = () => {
         onClose={() => setIsImportModalOpen(false)}
         onConfirm={() => fileInputRef.current?.click()}
       />
+
+      {/* Mobile Bottom Navigation (Liquid Glass Effect) */}
+      <div className="lg:hidden fixed bottom-6 left-4 right-4 z-40 pb-safe">
+        <div className="bg-slate-900/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] shadow-blue-900/20 rounded-3xl px-6 py-2.5 flex items-center justify-between relative overflow-hidden">
+          {/* subtle inner glow */}
+          <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent pointer-events-none rounded-3xl" />
+          
+          {navItems.filter(item => ['dashboard', 'stok_ff', 'stok_ml', 'jurnal'].includes(item.id)).map(item => {
+            const isActive = currentView === item.id;
+            return (
+              <button 
+                key={item.id}
+                onClick={() => setCurrentView(item.id as AppView)}
+                className="flex flex-col items-center justify-center gap-1 relative p-2 w-14"
+              >
+                {isActive && (
+                  <motion.div 
+                    layoutId="active-bottom-nav"
+                    className="absolute inset-0 bg-blue-500/20 rounded-2xl"
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                  />
+                )}
+                <item.icon className={`w-5 h-5 relative z-10 transition-all duration-300 ${isActive ? 'text-blue-400 scale-110 drop-shadow-[0_0_8px_rgba(96,165,250,0.5)]' : 'text-slate-400 hover:text-slate-300 hover:-translate-y-0.5'}`} />
+                <span className={`text-[9px] relative z-10 font-bold transition-all duration-300 tracking-wide ${isActive ? 'text-blue-400 opacity-100' : 'text-slate-500 opacity-0 translate-y-2'}`}>
+                  {item.id === 'dashboard' ? 'Home' : item.id === 'stok_ff' ? 'Stok FF' : item.id === 'stok_ml' ? 'Stok ML' : 'Jurnal'}
+                </span>
+              </button>
+            )
+          })}
+          
+          {/* Menu / More Button */}
+          <button 
+            onClick={toggleSidebar}
+            className="flex flex-col items-center justify-center gap-1 relative p-2 w-14 group"
+          >
+            <Menu className="w-5 h-5 text-slate-400 relative z-10 transition-all duration-300 group-hover:text-slate-300 group-hover:-translate-y-0.5" />
+            <span className="text-[9px] text-slate-500 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 relative z-10 font-bold transition-all duration-300 tracking-wide">Menu</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
