@@ -507,84 +507,78 @@ const DashboardLayout: React.FC = () => {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
         {/* Dark Topbar */}
-        <header className="h-auto min-h-[5rem] py-4 xl:py-0 xl:h-20 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 flex flex-col xl:flex-row items-start xl:items-center justify-between px-6 z-10 sticky top-0 shadow-lg shadow-black/10 gap-4 xl:gap-0">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full xl:w-auto">
-            <div className="flex items-center justify-between w-full md:w-auto">
-              <button onClick={toggleSidebar} className="lg:hidden text-slate-400 hover:text-white">
-                <Menu className="w-6 h-6" />
-              </button>
-            </div>
-            
-            {/* Search and Filter Container */}
-            <div className="flex flex-col lg:flex-row gap-y-3 lg:gap-x-4 w-full lg:w-auto">
-              {/* Search Input */}
-              <div className="flex relative group w-full lg:w-auto">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-400 transition-colors" />
-                <input 
-                  type="text" 
-                  value={globalSearch}
-                  onChange={(e) => setGlobalSearch(e.target.value)}
-                  placeholder="Cari ID, Spesifikasi..." 
-                  className="pl-10 pr-4 py-2.5 bg-slate-800/50 border border-slate-700/80 rounded-xl text-sm text-slate-300 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-shadow duration-200 w-full lg:w-64 font-medium"
-                />
-              </div>
-              
-              {/* Time Filter */}
-              <div className="flex flex-row items-center gap-2 w-full lg:w-auto">
-                <div className="relative flex items-center flex-1 lg:flex-none lg:w-28">
-                  <select 
-                    value={globalMonth}
-                    onChange={(e) => setGlobalMonth(e.target.value)}
-                    className="w-full appearance-none bg-slate-800/60 hover:bg-slate-800/90 border border-slate-700/80 hover:border-slate-600 text-slate-200 text-sm rounded-xl pl-3 pr-8 py-2.5 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-shadow duration-200 cursor-pointer font-medium"
-                  >
-                    <option value="Semua">Semua</option>
-                    <option value="Jan">Jan</option>
-                    <option value="Feb">Feb</option>
-                    <option value="Mar">Mar</option>
-                    <option value="Apr">Apr</option>
-                    <option value="Mei">Mei</option>
-                    <option value="Jun">Jun</option>
-                    <option value="Jul">Jul</option>
-                    <option value="Agu">Agu</option>
-                    <option value="Sep">Sep</option>
-                    <option value="Okt">Okt</option>
-                    <option value="Nov">Nov</option>
-                    <option value="Des">Des</option>
-                  </select>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none" />
-                </div>
-                
-                <div className="relative flex items-center flex-1 lg:flex-none lg:w-28">
-                  <select 
-                    value={globalYear}
-                    onChange={(e) => setGlobalYear(e.target.value)}
-                    className="w-full appearance-none bg-slate-800/60 hover:bg-slate-800/90 border border-slate-700/80 hover:border-slate-600 text-slate-200 text-sm rounded-xl pl-3 pr-8 py-2.5 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-shadow duration-200 cursor-pointer font-medium"
-                  >
-                    <option value="Semua">Semua</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    <option value="2027">2027</option>
-                    <option value="2028">2028</option>
-                    <option value="2029">2029</option>
-                    <option value="2030">2030</option>
-                  </select>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none" />
-                </div>
-
-                <button 
-                  onClick={resetGlobalFilters}
-                  className="flex items-center justify-center gap-1.5 px-4 py-2.5 text-sm text-slate-300 hover:text-white bg-slate-800/50 hover:bg-slate-800 border border-slate-700/80 rounded-xl transition-all font-medium active:scale-95 group flex-none lg:w-auto"
-                >
-                  <RefreshCw className="w-3.5 h-3.5 text-blue-400 transition-transform duration-300 group-hover:rotate-180" />
-                  <span className="lg:hidden">Reset</span>
-                  <span className="hidden lg:inline">Reset</span>
-                </button>
-              </div>
+        <header className="py-3 xl:py-0 xl:h-20 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 flex flex-wrap xl:flex-nowrap items-center justify-between px-4 xl:px-6 z-10 sticky top-0 shadow-lg shadow-black/10 gap-y-3 xl:gap-0">
+          
+          {/* 1. Menu & Search */}
+          <div className="flex items-center gap-3 flex-1 xl:flex-none order-1">
+            <button onClick={toggleSidebar} className="lg:hidden text-slate-400 hover:text-white shrink-0 p-1">
+              <Menu className="w-6 h-6" />
+            </button>
+            <div className="flex relative group flex-1 xl:w-64">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-400 transition-colors" />
+              <input 
+                type="text" 
+                value={globalSearch}
+                onChange={(e) => setGlobalSearch(e.target.value)}
+                placeholder="Cari ID..." 
+                className="pl-10 pr-4 py-2 bg-slate-800/50 border border-slate-700/80 rounded-xl text-sm text-slate-300 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-shadow duration-200 w-full font-medium"
+              />
             </div>
           </div>
+
+          {/* 3. Filters (Order 3 on mobile, Order 2 on Desktop) */}
+          <div className="flex flex-row items-center gap-2 w-full xl:w-auto order-3 xl:order-2 xl:mx-4">
+            <div className="relative flex items-center flex-1 xl:flex-none xl:w-28">
+              <select 
+                value={globalMonth}
+                onChange={(e) => setGlobalMonth(e.target.value)}
+                className="w-full appearance-none bg-slate-800/60 hover:bg-slate-800/90 border border-slate-700/80 hover:border-slate-600 text-slate-200 text-sm rounded-xl pl-3 pr-8 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-shadow duration-200 cursor-pointer font-medium"
+              >
+                <option value="Semua">Semua</option>
+                <option value="Jan">Jan</option>
+                <option value="Feb">Feb</option>
+                <option value="Mar">Mar</option>
+                <option value="Apr">Apr</option>
+                <option value="Mei">Mei</option>
+                <option value="Jun">Jun</option>
+                <option value="Jul">Jul</option>
+                <option value="Agu">Agu</option>
+                <option value="Sep">Sep</option>
+                <option value="Okt">Okt</option>
+                <option value="Nov">Nov</option>
+                <option value="Des">Des</option>
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none" />
+            </div>
+            
+            <div className="relative flex items-center flex-1 xl:flex-none xl:w-28">
+              <select 
+                value={globalYear}
+                onChange={(e) => setGlobalYear(e.target.value)}
+                className="w-full appearance-none bg-slate-800/60 hover:bg-slate-800/90 border border-slate-700/80 hover:border-slate-600 text-slate-200 text-sm rounded-xl pl-3 pr-8 py-2 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-shadow duration-200 cursor-pointer font-medium"
+              >
+                <option value="Semua">Semua</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none" />
+            </div>
+
+            <button 
+              onClick={resetGlobalFilters}
+              className="flex items-center justify-center gap-1.5 px-3 py-2 text-sm text-slate-300 hover:text-white bg-slate-800/50 hover:bg-slate-800 border border-slate-700/80 rounded-xl transition-all font-medium active:scale-95 group flex-none xl:w-auto"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-blue-400 transition-transform duration-300 group-hover:rotate-180" />
+            </button>
+          </div>
           
-          <div className="flex items-center justify-end gap-3 sm:gap-6 w-full xl:w-auto mt-2 xl:mt-0">
-            {/* Cloud Actions */}
+          {/* 2. Right Side / Bell (Order 2 on mobile, Order 3 on Desktop) */}
+          <div className="flex items-center justify-end gap-3 shrink-0 order-2 xl:order-3">
+            {/* Cloud Actions (Hidden on Mobile) */}
             <div className="hidden lg:flex items-center gap-3 border-r border-slate-800/80 pr-6">
               <div className="flex flex-col items-end gap-1">
                 <span className="inline-flex items-center gap-1.5 text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
@@ -601,7 +595,7 @@ const DashboardLayout: React.FC = () => {
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
                 onClick={handleCloudSync}
                 disabled={isSyncing}
-                className="min-h-[44px] min-w-[44px] flex items-center justify-center bg-blue-600 hover:bg-blue-500 hover:shadow-[0_0_12px_rgba(37,99,235,0.4)] text-white rounded-xl transition-colors shadow-md shadow-blue-900/20 disabled:opacity-70 cursor-pointer"
+                className="min-h-[40px] min-w-[40px] flex items-center justify-center bg-blue-600 hover:bg-blue-500 hover:shadow-[0_0_12px_rgba(37,99,235,0.4)] text-white rounded-xl transition-colors shadow-md shadow-blue-900/20 disabled:opacity-70 cursor-pointer"
                 title="Simpan ke Cloud"
               >
                 <Cloud className={`w-4 h-4 ${isSyncing ? 'animate-bounce' : ''}`} />
@@ -612,7 +606,7 @@ const DashboardLayout: React.FC = () => {
                   whileTap={{ scale: 0.90 }}
                   onClick={handleExportData}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-blue-400 border border-slate-800 hover:border-blue-500/30 hover:bg-blue-500/5 bg-slate-800/50 rounded-xl transition-colors cursor-pointer" title="Export">
+                  className="min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-400 hover:text-blue-400 border border-slate-800 hover:border-blue-500/30 hover:bg-blue-500/5 bg-slate-800/50 rounded-xl transition-colors cursor-pointer" title="Export">
                   <Download className="w-4 h-4" />
                 </motion.button>
                 <input 
@@ -627,7 +621,7 @@ const DashboardLayout: React.FC = () => {
                   whileTap={{ scale: 0.90 }}
                   onClick={() => setIsImportModalOpen(true)}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  className="min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-blue-400 border border-slate-800 hover:border-blue-500/30 hover:bg-blue-500/5 bg-slate-800/50 rounded-xl transition-colors cursor-pointer" title="Import">
+                  className="min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-400 hover:text-blue-400 border border-slate-800 hover:border-blue-500/30 hover:bg-blue-500/5 bg-slate-800/50 rounded-xl transition-colors cursor-pointer" title="Import">
                   <Upload className="w-4 h-4" />
                 </motion.button>
               </div>
@@ -640,10 +634,10 @@ const DashboardLayout: React.FC = () => {
                 whileTap={{ scale: 0.90 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
                 onClick={() => setIsNotifOpen(!isNotifOpen)}
-                className="relative min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer"
+                className="relative p-2 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer rounded-xl bg-slate-800/50 border border-slate-700/80"
               >
                 <Bell className="w-5 h-5" />
-                <span className="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full border border-slate-900"></span>
+                <span className="absolute top-0.5 right-1 w-2.5 h-2.5 bg-blue-500 rounded-full border-[1.5px] border-slate-900"></span>
               </motion.button>
               
               <AnimatePresence>
@@ -815,7 +809,7 @@ const DashboardLayout: React.FC = () => {
       />
 
       {/* Mobile Bottom Navigation (Ultra Premium Liquid Glass) */}
-      <div className="lg:hidden fixed bottom-6 left-4 right-4 z-40 pb-safe">
+      <div className={`lg:hidden fixed bottom-6 left-4 right-4 z-40 pb-safe transition-all duration-300 ease-[cubic-bezier(0.25,1,0.5,1)] ${sidebarOpen ? 'translate-y-40 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'}`}>
         <div className="bg-gradient-to-b from-slate-800/70 to-slate-950/80 backdrop-blur-[32px] border-t border-white/20 border-x border-white/10 border-b border-black/50 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.15)] rounded-[2rem] px-5 py-3 flex items-center justify-between relative overflow-hidden ring-1 ring-black/40">
           {/* Glossy top highlight */}
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-70" />
