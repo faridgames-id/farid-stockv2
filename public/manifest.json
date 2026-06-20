@@ -1,0 +1,16 @@
+{
+  "name": "Farid Account Management",
+  "short_name": "Farid Account",
+  "description": "Platform Manajemen Akun Game Premium",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/logo.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

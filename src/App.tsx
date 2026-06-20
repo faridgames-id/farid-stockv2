@@ -1,0 +1,141 @@
+import React, { useState, useEffect } from 'react';
+import DashboardLayout from './layouts/DashboardLayout';
+import ErrorBoundary from './components/ErrorBoundary';
+import CinematicIntro from './components/CinematicIntro';
+import LoginPage from './pages/LoginPage';
+import { AnimatePresence } from 'framer-motion';
+import { Toaster } from 'sonner';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './lib/firebase';
+import { fetchFromCloud, syncToCloud } from './lib/firebaseSync';
+import { useAppStore } from './store/useAppStore';
+import { useInventoryStore } from './store/useInventoryStore';
+import { useWishlistStore } from './store/useWishlistStore';
+import { useJurnalStore } from './store/useJurnalStore';
+import { useRequestStore } from './store/useRequestStore';
+
+function App() {
+  const [introComplete, setIntroComplete] = useState(false);
+  const { setUser, clearUser, isLoggedIn, guestMode, addSavedAccount, userId } = useAppStore();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUser({
+          uid: user.uid,
+          displayName: user.displayName || 'Pengguna',
+          email: user.email || '',
+          photoURL: user.photoURL || ''
+        });
+        
+        // Auto-save account to local storage for multi-account switcher
+        addSavedAccount({
+          uid: user.uid,
+          displayName: user.displayName || 'Pengguna',
+          email: user.email || '',
+          photoURL: user.photoURL || ''
+        });
+
+        // Fetch data from cloud automatically upon login
+        await fetchFromCloud(user.uid);
+      } else {
+        clearUser();
+      }
+    });
+    return () => unsubscribe();
+  }, [setUser, clearUser, addSavedAccount]);
+
+  // Auto-Sync Effect
+  useEffect(() => {
+    if (!isLoggedIn || !userId) return;
+
+    let syncTimeout: NodeJS.Timeout;
+    
+    const triggerSync = () => {
+      clearTimeout(syncTimeout);
+      syncTimeout = setTimeout(() => {
+        syncToCloud(userId);
+      }, 2000); // 2 seconds debounce
+    };
+
+    const unsubInventory = useInventoryStore.subscribe(triggerSync);
+    const unsubWishlist = useWishlistStore.subscribe(triggerSync);
+    const unsubJurnal = useJurnalStore.subscribe(triggerSync);
+    const unsubRequest = useRequestStore.subscribe(triggerSync);
+
+    return () => {
+      clearTimeout(syncTimeout);
+      unsubInventory();
+      unsubWishlist();
+      unsubJurnal();
+      unsubRequest();
+    };
+  }, [isLoggedIn, userId]);
+
+  // Zero-React-Render spotlight: Direct DOM mutation + rAF throttle
+  useEffect(() => {
+    let rafId: number | null = null;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (rafId !== null) return; // throttle to one rAF per frame
+      rafId = requestAnimationFrame(() => {
+        // querySelectorAll only runs inside rAF — off the critical path
+        const cards = document.querySelectorAll<HTMLElement>('.spotlight-effect');
+        cards.forEach((card) => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+          card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+        });
+        rafId = null;
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  return (
+    <ErrorBoundary>
+      {/* Persisten Animated Background untuk Intro dan Login Page */}
+      {(!isLoggedIn && !guestMode) && (
+        <div className="fixed inset-0 z-0 bg-slate-950 overflow-hidden">
+          {/* Animated Gradients */}
+          <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-blue-600/30 blur-[120px] animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-cyan-500/20 blur-[120px] animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
+          <div className="absolute top-[30%] left-[40%] w-[40%] h-[40%] rounded-full bg-indigo-500/20 blur-[100px] animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
+          
+          {/* CSS Stars Background (menggunakan pattern radial kecil) */}
+          <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)), radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0,0,0,0)), radial-gradient(1px 1px at 50px 160px, #ffffff, rgba(0,0,0,0)), radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0,0,0,0)), radial-gradient(1px 1px at 130px 80px, #ffffff, rgba(0,0,0,0)), radial-gradient(1px 1px at 160px 120px, #ffffff, rgba(0,0,0,0))', backgroundRepeat: 'repeat', backgroundSize: '200px 200px' }} />
+        </div>
+      )}
+
+      <AnimatePresence mode="wait">
+        {!introComplete && (
+          <CinematicIntro key="intro" isFastMode={isLoggedIn || guestMode} onComplete={() => setIntroComplete(true)} />
+        )}
+      </AnimatePresence>
+      {introComplete && !isLoggedIn && !guestMode && <LoginPage />}
+      {introComplete && (isLoggedIn || guestMode) && <DashboardLayout />}
+      <Toaster 
+        position="top-center" 
+        toastOptions={{
+          classNames: {
+            toast: "!border-0 !shadow-2xl !rounded-2xl !text-white font-['Inter'] !p-4 !items-center",
+            success: "!bg-gradient-to-br !from-blue-600 !to-cyan-400",
+            error: "!bg-gradient-to-br !from-rose-500 !to-red-600",
+            info: "!bg-gradient-to-br !from-blue-600 !to-cyan-400",
+            warning: "!bg-gradient-to-br !from-amber-500 !to-orange-500",
+            title: "!text-white !font-bold !text-sm",
+            description: "!text-white/90 !text-xs",
+            icon: "!text-white",
+          }
+        }}
+      />
+    </ErrorBoundary>
+  );
+}
+
+export default App;
