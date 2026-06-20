@@ -350,7 +350,7 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
             </div>
           </div>
           <div className="flex justify-end pt-2">
-            <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-md shadow-blue-500/20 transition-all active:scale-[0.98] flex items-center gap-2">
+            <button type="submit" className="w-full md:w-auto justify-center bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-md shadow-blue-500/20 transition-all active:scale-[0.98] flex items-center gap-2">
               <CheckCircle className="w-5 h-5" /> Simpan Entri Akun FF
             </button>
           </div>
