@@ -214,6 +214,7 @@ const Statistik: React.FC = () => {
         className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
         {kpiCards.map((card) => (
           <motion.div key={card.label} variants={itemVariants} 
+            onClick={() => {}}
             whileHover={{ y: -8, scale: 1.02 }}
             whileTap={{ scale: 0.95, rotate: -1, y: 2 }}
             transition={{ type: "spring", stiffness: 400, damping: 14 }}

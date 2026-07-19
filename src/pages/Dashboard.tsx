@@ -297,6 +297,7 @@ const Dashboard: React.FC = () => {
         {metricCards.map((card, i) => (
           <motion.div
             key={card.label}
+            onClick={() => {}}
             variants={itemVariants}
             whileHover={{ scale: 1.02, y: -4, transition: { duration: 0.2 } }}
             whileTap={{ scale: 0.96, y: 0 }}
@@ -339,6 +340,7 @@ const Dashboard: React.FC = () => {
             className="flex justify-center relative z-10 mb-5 mt-1"
           >
             <motion.div 
+              onClick={() => {}}
               whileHover={{ scale: 1.05, boxShadow: "0px 10px 30px rgba(59, 130, 246, 0.4)" }}
               whileTap={{ scale: 0.95 }}
               className="group relative cursor-pointer overflow-hidden px-4 py-1.5 sm:px-6 sm:py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-[9px] sm:text-[11px] font-display font-black uppercase tracking-[0.1em] sm:tracking-[0.2em] text-white rounded-full flex items-center gap-1.5 sm:gap-2 whitespace-nowrap border border-blue-400/50 max-w-full shadow-[0_4px_20px_rgba(37,99,235,0.3)] transition-shadow duration-300"
