@@ -108,7 +108,7 @@ const KalenderKeuangan: React.FC = () => {
         >
           <CalendarDays className="w-6 h-6 text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)] group-hover:scale-110 transition-transform duration-300" />
         </motion.div>
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center pt-1">
           <h2 className="text-xl font-display font-bold text-white tracking-tight leading-none">Kalender Keuangan</h2>
           <p className="text-slate-500 text-sm -mt-2.5 font-sans">Pantau status modal masuk dan tanggal laku terjual dalam grid bulanan</p>
         </div>

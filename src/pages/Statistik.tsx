@@ -201,9 +201,9 @@ const Statistik: React.FC = () => {
           >
             <BarChart3 className="w-6 h-6 text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)] group-hover:scale-110 transition-transform duration-300" />
           </motion.div>
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center pt-1">
             <h2 className="text-xl font-bold text-white tracking-tight leading-none">Sales Report</h2>
-            <p className="text-slate-400 text-sm -mt-2.5">Pemantauan performa inventaris dan ringkasan finansial</p>
+            <p className="text-slate-400 text-sm mt-0.5">Pemantauan performa inventaris dan ringkasan finansial</p>
           </div>
         </div>
 
