@@ -159,7 +159,7 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
         >
           <Package className="w-6 h-6 text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)] group-hover:scale-110 transition-transform duration-300" />
         </motion.div>
-        <div className="flex flex-col justify-center pt-1">
+        <div className="flex flex-col justify-center translate-y-1">
           <h2 className="text-xl font-bold text-white tracking-tight leading-none">Stok Free Fire</h2>
           <p className="text-slate-400 text-sm mt-0.5">Kelola inventaris dan tambah akun Free Fire</p>
         </div>

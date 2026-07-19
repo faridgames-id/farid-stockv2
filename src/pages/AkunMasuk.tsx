@@ -95,7 +95,7 @@ const AkunMasuk: React.FC = () => {
         >
           <CalendarPlus className="w-6 h-6 text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)] group-hover:scale-110 transition-transform duration-300" />
         </motion.div>
-        <div className="flex flex-col justify-center pt-1">
+        <div className="flex flex-col justify-center translate-y-1">
           <h2 className="text-lg font-display font-bold text-white tracking-tight leading-none">Akun Masuk Harian</h2>
           <p className="text-slate-500 text-xs -mt-2.5 font-sans">Riwayat kronologis penambahan stok inventaris harian dalam grid bulanan</p>
         </div>
