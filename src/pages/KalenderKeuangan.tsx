@@ -98,14 +98,19 @@ const KalenderKeuangan: React.FC = () => {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex items-center gap-4 border-b border-slate-800/60 pb-5"
+        className="flex items-center gap-2.5 border-b border-slate-800/60 pb-3"
       >
-        <div className="p-3 bg-gradient-to-br from-blue-600/30 to-indigo-600/20 rounded-2xl border border-blue-500/20 shadow-lg shadow-blue-900/20">
-          <CalendarDays className="w-6 h-6 text-blue-400" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-display font-bold text-white tracking-tight leading-none">Kalender Keuangan</h2>
-          <p className="text-slate-500 text-sm mt-1 font-sans">Pantau status modal masuk dan tanggal laku terjual dalam grid bulanan</p>
+        <motion.div 
+          initial={{ y: -40, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          transition={{ type: "spring", stiffness: 300, damping: 15, delay: 0 }} 
+          className="shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-[#0f172a] shadow-[4px_4px_10px_rgba(0,0,0,0.5),-4px_-4px_10px_rgba(255,255,255,0.03),inset_1px_1px_2px_rgba(255,255,255,0.05)] border border-slate-800 relative group"
+        >
+          <CalendarDays className="w-6 h-6 text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)] group-hover:scale-110 transition-transform duration-300" />
+        </motion.div>
+        <div className="flex flex-col justify-center">
+          <h2 className="text-xl font-display font-bold text-white tracking-tight leading-none">Kalender Keuangan</h2>
+          <p className="text-slate-500 text-sm -mt-2.5 font-sans">Pantau status modal masuk dan tanggal laku terjual dalam grid bulanan</p>
         </div>
       </motion.div>
 
@@ -116,7 +121,7 @@ const KalenderKeuangan: React.FC = () => {
           className="lg:col-span-2"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.5, delay: 0 }}
         >
           <ParallaxCard className="h-full" intensity={5}>
             <div className="bg-[#0a0f1e]/98 border border-slate-700/60 p-7 rounded-3xl space-y-6 relative overflow-hidden group h-full"
@@ -209,7 +214,7 @@ const KalenderKeuangan: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0 }}
         >
           <ParallaxCard className="h-full" intensity={5}>
             <div className="bg-[#0a0f1e]/98 border border-slate-700/60 p-6 rounded-3xl relative overflow-hidden group h-full flex flex-col"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { Plus, Search, Edit2, Trash2, CheckCircle2, XCircle } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, CheckCircle2, XCircle, BookmarkPlus, ShoppingBag, AlertCircle, Wallet, CheckCircle } from 'lucide-react';
 import { useWishlistStore, type WishlistItem } from '../store/useWishlistStore';
 import { useGlobalFilter } from '../hooks/useGlobalFilter';
 import PageMotionWrapper, { itemVariants } from '../components/PageMotionWrapper';
@@ -29,10 +29,20 @@ const Wishlist: React.FC = () => {
 
   return (
     <PageMotionWrapper className="space-y-6 text-sans select-none">
-      <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-        <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Wishlist Expansi</h2>
-          <p className="text-slate-400 text-sm mt-0.5">Kelola daftar kebutuhan untuk ekspansi bisnis</p>
+      <div className="flex justify-between items-center border-b border-slate-800 pb-3">
+        <div className="flex items-center gap-2.5">
+          <motion.div 
+            initial={{ y: 40, opacity: 0 }} 
+            animate={{ y: 0, opacity: 1 }} 
+            transition={{ type: "spring", stiffness: 300, damping: 15, delay: 0 }} 
+            className="shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-[#0f172a] shadow-[4px_4px_10px_rgba(0,0,0,0.5),-4px_-4px_10px_rgba(255,255,255,0.03),inset_1px_1px_2px_rgba(255,255,255,0.05)] border border-slate-800 relative group"
+          >
+            <BookmarkPlus className="w-6 h-6 text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)] group-hover:scale-110 transition-transform duration-300" />
+          </motion.div>
+          <div className="flex flex-col justify-center">
+            <h2 className="text-xl font-bold text-white tracking-tight leading-none">Wishlist Expansi</h2>
+            <p className="text-slate-400 text-sm -mt-2.5">Kelola daftar kebutuhan untuk ekspansi bisnis</p>
+          </div>
         </div>
       </div>
 
@@ -44,19 +54,19 @@ const Wishlist: React.FC = () => {
         </h3>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Nama Barang</label>
               <input 
                 {...register('namaBarang', { required: true })} 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium placeholder-slate-500" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium placeholder-slate-500" 
                 placeholder="Misal: Monitor 24 inch" 
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kategori</label>
               <select 
                 {...register('kategori')} 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
               >
                 <option value="Peralatan">Peralatan</option>
                 <option value="Furniture">Furniture</option>
@@ -64,55 +74,55 @@ const Wishlist: React.FC = () => {
                 <option value="Lainnya">Lainnya</option>
               </select>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Estimasi Harga (Rp)</label>
               <input 
                 type="number" 
                 {...register('estimasiHarga', { required: true })} 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-bold placeholder-slate-500" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-bold placeholder-slate-500" 
                 placeholder="0" 
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Prioritas</label>
               <select 
                 {...register('prioritas')} 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
               >
                 <option value="Rendah">Rendah</option>
                 <option value="Sedang">Sedang</option>
                 <option value="Tinggi">Tinggi</option>
               </select>
             </div>
-            <div className="lg:col-span-2 space-y-2">
+            <div className="lg:col-span-2 space-y-1.5 sm:space-y-2">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Spesifikasi Detail</label>
               <input 
                 {...register('spesifikasi')} 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium placeholder-slate-500" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium placeholder-slate-500" 
                 placeholder="Detail spesifikasi..." 
               />
             </div>
-            <div className="lg:col-span-2 space-y-2">
+            <div className="lg:col-span-2 space-y-1.5 sm:space-y-2">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Link / Toko</label>
               <input 
                 {...register('linkToko')} 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium placeholder-slate-500" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium placeholder-slate-500" 
                 placeholder="https://..." 
               />
             </div>
-            <div className="lg:col-span-3 space-y-2">
+            <div className="lg:col-span-3 space-y-1.5 sm:space-y-2">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Catatan Tambahan</label>
               <input 
                 {...register('catatan')} 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium placeholder-slate-500" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium placeholder-slate-500" 
                 placeholder="Catatan..." 
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status</label>
               <select 
                 {...register('statusPembelian')} 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-sm sm:text-base text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
               >
                 <option value="Belum">Belum Dibeli</option>
                 <option value="Sudah Terima">Sudah Terima</option>
@@ -120,38 +130,146 @@ const Wishlist: React.FC = () => {
             </div>
           </div>
           <div className="flex justify-end pt-2">
-            <button 
+            <motion.button 
+              whileHover={{ scale: 1.02, filter: "brightness(1.1)" }}
+              whileTap={{ scale: 0.96 }}
               type="submit" 
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-md shadow-blue-500/20 transition-all active:scale-[0.98]"
+              className="w-full md:w-auto justify-center bg-gradient-to-r from-blue-600 to-blue-500 text-white px-4 py-3 sm:px-8 sm:py-3.5 text-sm sm:text-base rounded-xl font-bold flex items-center gap-2 shadow-[0_0_10px_rgba(59,130,246,0.3)] border border-blue-400/20 transition-colors"
             >
-              Simpan Wishlist
-            </button>
+              Simpan Target
+            </motion.button>
           </div>
         </form>
       </motion.div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <motion.div variants={itemVariants} whileHover={{ y: -4 }} className="bg-slate-900 border border-slate-800/60 rounded-2xl p-5 shadow-sm spotlight-effect">
-          <p className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider">Total Item</p>
-          <p className="text-2xl font-black text-white mt-1.5">{totalItem}</p>
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.04 } }
+        }}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-50px" }}
+        className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+      >
+        {/* Card 1: Total Item */}
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0, y: 20, scale: 0.95 },
+            show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 200, damping: 15 } }
+          }}
+          whileHover={{ scale: 1.02, y: -4 }}
+          whileTap={{ scale: 0.96, rotate: -1, y: 2 }}
+          className="relative overflow-hidden group bg-gradient-to-br from-cyan-400 to-blue-600 rounded-[24px] p-5 sm:p-6 border border-cyan-300/30 shadow-none hover:shadow-none transition-all duration-300 cursor-pointer"
+        >
+          {/* MOTIF: Micro-bubbles / Buih Melayang */}
+          <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out pointer-events-none z-0" />
+          <div className="absolute top-4 left-6 w-3 h-3 bg-white/10 rounded-full group-hover:-translate-y-4 group-hover:scale-125 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20" />
+          <div className="absolute top-10 left-16 w-2 h-2 bg-white/20 rounded-full group-hover:-translate-y-6 group-hover:scale-150 transition-transform duration-300 ease-out pointer-events-none z-0" />
+          <div className="absolute bottom-6 left-12 w-4 h-4 bg-white/5 rounded-full group-hover:-translate-y-5 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.3)]" />
+          <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-white/10 rounded-full group-hover:-translate-y-8 transition-transform duration-300 ease-out pointer-events-none z-0" />
+          <div className="absolute bottom-4 right-10 w-5 h-5 bg-gradient-to-tr from-white/10 to-transparent rounded-full group-hover:-translate-y-4 group-hover:-translate-x-2 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20" />
+          <div className="absolute -bottom-2 right-4 w-8 h-8 bg-white/5 rounded-full group-hover:-translate-y-6 group-hover:scale-110 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/10 backdrop-blur-sm" />
+          
+          <div className="relative z-10 flex flex-col h-full justify-between gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10.5px] text-cyan-100 font-extrabold uppercase tracking-widest drop-shadow-sm">Total Item</p>
+              <div className="p-2 sm:p-2.5 bg-white/10 rounded-[12px] sm:rounded-[14px] border border-white/20 shadow-sm group-hover:-translate-y-2 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500 backdrop-blur-md">
+                <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-sm" />
+              </div>
+            </div>
+            <p className="text-xl sm:text-2xl font-extrabold text-white drop-shadow-md">{totalItem}</p>
+          </div>
         </motion.div>
         
-        <motion.div variants={itemVariants} whileHover={{ y: -4 }} className="bg-gradient-to-br from-blue-700 to-blue-900 border border-blue-600/20 rounded-2xl p-5 shadow-sm spotlight-effect">
-          <p className="text-[10px] text-blue-200 font-extrabold uppercase tracking-wider">Prioritas Tinggi</p>
-          <p className="text-2xl font-black text-white mt-1.5">{prioritasTinggi}</p>
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0, y: 20, scale: 0.95 },
+            show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 200, damping: 15 } }
+          }}
+          whileHover={{ scale: 1.02, y: -4 }}
+          whileTap={{ scale: 0.96, rotate: -1, y: 2 }}
+          className="relative overflow-hidden group bg-gradient-to-br from-sky-400 to-blue-600 rounded-[24px] p-5 sm:p-6 border border-sky-300/30 shadow-none hover:shadow-none transition-all duration-300 cursor-pointer"
+        >
+          {/* MOTIF: Micro-bubbles / Buih Melayang */}
+          <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out pointer-events-none z-0" />
+          <div className="absolute top-4 left-6 w-3 h-3 bg-white/10 rounded-full group-hover:-translate-y-4 group-hover:scale-125 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20" />
+          <div className="absolute top-10 left-16 w-2 h-2 bg-white/20 rounded-full group-hover:-translate-y-6 group-hover:scale-150 transition-transform duration-300 ease-out pointer-events-none z-0" />
+          <div className="absolute bottom-6 left-12 w-4 h-4 bg-white/5 rounded-full group-hover:-translate-y-5 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.3)]" />
+          <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-white/10 rounded-full group-hover:-translate-y-8 transition-transform duration-300 ease-out pointer-events-none z-0" />
+          <div className="absolute bottom-4 right-10 w-5 h-5 bg-gradient-to-tr from-white/10 to-transparent rounded-full group-hover:-translate-y-4 group-hover:-translate-x-2 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20" />
+          <div className="absolute -bottom-2 right-4 w-8 h-8 bg-white/5 rounded-full group-hover:-translate-y-6 group-hover:scale-110 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/10 backdrop-blur-sm" />
+          
+          <div className="relative z-10 flex flex-col h-full justify-between gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10.5px] text-sky-100 font-extrabold uppercase tracking-widest drop-shadow-sm">Prioritas Tinggi</p>
+              <div className="p-2 sm:p-2.5 bg-white/10 rounded-[12px] sm:rounded-[14px] border border-white/20 shadow-sm group-hover:-translate-y-2 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500 backdrop-blur-md">
+                <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-sm" />
+              </div>
+            </div>
+            <p className="text-xl sm:text-2xl font-extrabold text-white drop-shadow-md">{prioritasTinggi}</p>
+          </div>
         </motion.div>
         
-        <motion.div variants={itemVariants} whileHover={{ y: -4 }} className="bg-slate-900 border border-slate-800/60 rounded-2xl p-5 shadow-sm spotlight-effect">
-          <p className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider">Total Estimasi</p>
-          <p className="text-2xl font-black text-white mt-1.5">Rp {totalEstimasi.toLocaleString('id-ID')}</p>
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0, y: 20, scale: 0.95 },
+            show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 200, damping: 15 } }
+          }}
+          whileHover={{ scale: 1.02, y: -4 }}
+          whileTap={{ scale: 0.96, rotate: -1, y: 2 }}
+          className="relative overflow-hidden group bg-gradient-to-br from-blue-600 to-blue-900 rounded-[24px] p-5 sm:p-6 border border-blue-500/30 shadow-none hover:shadow-none transition-all duration-300 cursor-pointer"
+        >
+          {/* MOTIF: Micro-bubbles / Buih Melayang */}
+          <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out pointer-events-none z-0" />
+          <div className="absolute top-4 left-6 w-3 h-3 bg-white/10 rounded-full group-hover:-translate-y-4 group-hover:scale-125 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20" />
+          <div className="absolute top-10 left-16 w-2 h-2 bg-white/20 rounded-full group-hover:-translate-y-6 group-hover:scale-150 transition-transform duration-300 ease-out pointer-events-none z-0" />
+          <div className="absolute bottom-6 left-12 w-4 h-4 bg-white/5 rounded-full group-hover:-translate-y-5 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.3)]" />
+          <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-white/10 rounded-full group-hover:-translate-y-8 transition-transform duration-300 ease-out pointer-events-none z-0" />
+          <div className="absolute bottom-4 right-10 w-5 h-5 bg-gradient-to-tr from-white/10 to-transparent rounded-full group-hover:-translate-y-4 group-hover:-translate-x-2 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20" />
+          <div className="absolute -bottom-2 right-4 w-8 h-8 bg-white/5 rounded-full group-hover:-translate-y-6 group-hover:scale-110 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/10 backdrop-blur-sm" />
+          
+          <div className="relative z-10 flex flex-col h-full justify-between gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10.5px] text-blue-200/90 font-extrabold uppercase tracking-widest drop-shadow-sm">Total Estimasi</p>
+              <div className="p-2 sm:p-2.5 bg-white/10 rounded-[12px] sm:rounded-[14px] border border-white/20 shadow-sm group-hover:-translate-y-2 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500 backdrop-blur-md">
+                <Wallet className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-sm" />
+              </div>
+            </div>
+            <p className="text-lg sm:text-xl font-extrabold text-white drop-shadow-md truncate">Rp {totalEstimasi.toLocaleString('id-ID')}</p>
+          </div>
         </motion.div>
 
-        <motion.div variants={itemVariants} whileHover={{ y: -4 }} className="bg-gradient-to-br from-blue-600 to-blue-800 border border-blue-500/20 rounded-2xl p-5 shadow-sm spotlight-effect">
-          <p className="text-[10px] text-blue-200 font-extrabold uppercase tracking-wider">Sudah Terima</p>
-          <p className="text-2xl font-black text-white mt-1.5">{sudahTerima}</p>
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0, y: 20, scale: 0.95 },
+            show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 200, damping: 15 } }
+          }}
+          whileHover={{ scale: 1.02, y: -4 }}
+          whileTap={{ scale: 0.96, rotate: -1, y: 2 }}
+          className="relative overflow-hidden group bg-gradient-to-br from-teal-400 to-blue-600 rounded-[24px] p-5 sm:p-6 border border-teal-300/30 shadow-none hover:shadow-none transition-all duration-300 cursor-pointer"
+        >
+          {/* MOTIF: Micro-bubbles / Buih Melayang */}
+          <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out pointer-events-none z-0" />
+          <div className="absolute top-4 left-6 w-3 h-3 bg-white/10 rounded-full group-hover:-translate-y-4 group-hover:scale-125 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20" />
+          <div className="absolute top-10 left-16 w-2 h-2 bg-white/20 rounded-full group-hover:-translate-y-6 group-hover:scale-150 transition-transform duration-300 ease-out pointer-events-none z-0" />
+          <div className="absolute bottom-6 left-12 w-4 h-4 bg-white/5 rounded-full group-hover:-translate-y-5 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.3)]" />
+          <div className="absolute top-1/2 right-1/4 w-2 h-2 bg-white/10 rounded-full group-hover:-translate-y-8 transition-transform duration-300 ease-out pointer-events-none z-0" />
+          <div className="absolute bottom-4 right-10 w-5 h-5 bg-gradient-to-tr from-white/10 to-transparent rounded-full group-hover:-translate-y-4 group-hover:-translate-x-2 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/20" />
+          <div className="absolute -bottom-2 right-4 w-8 h-8 bg-white/5 rounded-full group-hover:-translate-y-6 group-hover:scale-110 transition-transform duration-300 ease-out pointer-events-none z-0 border border-white/10 backdrop-blur-sm" />
+          
+          <div className="relative z-10 flex flex-col h-full justify-between gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[10.5px] text-teal-100 font-extrabold uppercase tracking-widest drop-shadow-sm">Sudah Terima</p>
+              <div className="p-2 sm:p-2.5 bg-white/10 rounded-[12px] sm:rounded-[14px] border border-white/20 shadow-sm group-hover:-translate-y-2 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500 backdrop-blur-md">
+                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-sm" />
+              </div>
+            </div>
+            <p className="text-xl sm:text-2xl font-extrabold text-white drop-shadow-md">{sudahTerima}</p>
+          </div>
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Data Table */}
       <motion.div variants={itemVariants} className="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-sm spotlight-effect relative group">

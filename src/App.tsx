@@ -40,6 +40,18 @@ function App() {
         await fetchFromCloud(user.uid);
       } else {
         clearUser();
+        
+        // Securely wipe local data so next user doesn't see it
+        useInventoryStore.getState().setAllAccounts([]);
+        useWishlistStore.getState().setAllItems([]);
+        useJurnalStore.getState().setAllEntries([]);
+        useRequestStore.getState().setAllOrders([]);
+        
+        // Optional: Remove local storage keys entirely for user data
+        localStorage.removeItem('inventory-storage');
+        localStorage.removeItem('wishlist-storage');
+        localStorage.removeItem('jurnal-storage');
+        localStorage.removeItem('request-storage');
       }
     });
     return () => unsubscribe();
@@ -121,16 +133,17 @@ function App() {
       {introComplete && (isLoggedIn || guestMode) && <DashboardLayout />}
       <Toaster 
         position="top-center" 
+        duration={2000}
         toastOptions={{
           classNames: {
-            toast: "!border-0 !shadow-2xl !rounded-2xl !text-white font-['Inter'] !p-4 !items-center",
-            success: "!bg-gradient-to-br !from-blue-600 !to-cyan-400",
-            error: "!bg-gradient-to-br !from-rose-500 !to-red-600",
-            info: "!bg-gradient-to-br !from-blue-600 !to-cyan-400",
-            warning: "!bg-gradient-to-br !from-amber-500 !to-orange-500",
-            title: "!text-white !font-bold !text-sm",
-            description: "!text-white/90 !text-xs",
-            icon: "!text-white",
+            toast: "group !backdrop-blur-xl !border !shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.3)] !rounded-xl sm:!rounded-2xl !text-white font-display !px-4 sm:!px-6 !py-2.5 sm:!py-4 !items-center !gap-2 sm:!gap-4 transition-all hover:scale-105",
+            success: "!bg-gradient-to-r !from-emerald-600 !to-emerald-800 !border-emerald-500/50",
+            error: "!bg-gradient-to-r !from-rose-600 !to-rose-800 !border-rose-500/50",
+            info: "!bg-gradient-to-r !from-blue-600 !to-indigo-800 !border-blue-500/50",
+            warning: "!bg-gradient-to-r !from-amber-600 !to-orange-800 !border-amber-500/50",
+            title: "!text-white !font-black !text-xs sm:!text-[15px] !tracking-wide",
+            description: "!text-blue-50 !text-[10px] sm:!text-xs !mt-0.5 sm:!mt-1 !font-medium",
+            icon: "!w-5 sm:!w-6 !h-5 sm:!h-6 !drop-shadow-lg",
           }
         }}
       />

@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;500;700;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Anton&display=swap');
 @import "tailwindcss";
 
+:root {
+  color-scheme: dark;
+}
+
 @theme {
   /* Color System - Semantic Variables */
   --color-background-primary: #0f172a; /* Slate 950 */
@@ -59,7 +63,7 @@
 @layer utilities {
   /* Transition Utilities */
   .smooth-transition {
-    transition-property: all;
+    transition-property: background-color, border-color, color, fill, stroke, box-shadow, opacity, transform;
     transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
     transition-duration: var(--timing-normal);
   }
@@ -144,6 +148,38 @@
   .hover-lift:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
+  }
+
+  /* Neumorphism Utilities */
+  .neu-flat {
+    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.4), 
+                -6px -6px 12px rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+  }
+  
+  .neu-pressed {
+    background-color: var(--color-background-primary);
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.5), 
+                inset -4px -4px 8px rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .neu-flat-elevated {
+    box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.5), 
+                -8px -8px 16px rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+  }
+
+  .neu-interactive {
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    transform: translateZ(0); /* Hardware acceleration to prevent shape/text lag on scroll */
+    will-change: transform, box-shadow;
+  }
+
+  .neu-interactive:active {
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.4), 
+                inset -3px -3px 6px rgba(255, 255, 255, 0.03);
+    transform: scale(0.98) translateZ(0);
   }
 
   /* Accent Utilities */

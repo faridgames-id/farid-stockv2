@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
-import gsap from 'gsap';
 
 interface SmoothScrollProps {
   children: React.ReactNode;
@@ -8,48 +7,37 @@ interface SmoothScrollProps {
 }
 
 /**
- * GSAP-Synchronized Lenis Smooth Scroll Wrapper
- *
- * Attaches Lenis to the parent scroll container.
- * Mobile: disabled → native OS scroll.
+ * Optimized Lenis Smooth Scroll Wrapper
+ * Snappy configuration to avoid lag/delay.
+ * Mobile uses native momentum scroll.
  */
 export default function SmoothScrollWrapper({ children, onScroll }: SmoothScrollProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Disable on mobile — native scroll is better for battery/heat
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if (isMobile) return;
+    if (!containerRef.current) return;
 
-    const wrapper = containerRef.current;
-    if (!wrapper) return;
-
-    const content = wrapper.firstElementChild as HTMLElement;
-    if (!content) return;
-
+    // Initialize Lenis with settings for a fast, responsive smooth scroll without the "heavy" feeling
     const lenis = new Lenis({
-      wrapper,
-      content,
-      duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
+      wrapper: containerRef.current,
+      content: containerRef.current.firstElementChild as HTMLElement,
+      lerp: 0.15, // Higher lerp makes it more snappy and less delayed
+      wheelMultiplier: 1.2, // Slightly faster wheel movement
       smoothWheel: true,
-      touchMultiplier: 0,
+      syncTouch: false, // Leave touch to native OS for zero delay on mobile
     });
 
     lenisRef.current = lenis;
 
-    const gsapTickerCallback = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(gsapTickerCallback);
-    gsap.ticker.lagSmoothing(0);
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    const rafId = requestAnimationFrame(raf);
 
     return () => {
-      gsap.ticker.remove(gsapTickerCallback);
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, []);
@@ -58,9 +46,12 @@ export default function SmoothScrollWrapper({ children, onScroll }: SmoothScroll
     <div
       ref={containerRef}
       onScroll={onScroll}
-      className="absolute inset-0 overflow-y-auto overflow-x-hidden"
+      className="absolute inset-0 overflow-y-auto overflow-x-hidden touch-pan-y overscroll-contain will-change-scroll scroll-smooth"
+      style={{ WebkitOverflowScrolling: 'touch' }}
     >
-      {children}
+      <div className="w-full min-h-full">
+        {children}
+      </div>
     </div>
   );
 }

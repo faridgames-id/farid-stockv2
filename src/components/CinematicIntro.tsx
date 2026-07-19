@@ -145,7 +145,7 @@ const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, isFastMode 
                     initial={{ opacity: 0, y: 32, scale: 0.88 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative mb-8 flex flex-col items-center"
+                    className="relative mb-8 flex flex-col items-center w-[85%] max-w-[320px] md:w-auto md:max-w-none"
                     style={{ willChange: 'transform, opacity' }}
                   >
                     {/* Animated Liquid Orbs behind the card */}
@@ -170,42 +170,28 @@ const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, isFastMode 
                       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-cyan-400/10 via-transparent to-blue-600/10 blur-[50px] mix-blend-overlay pointer-events-none" />
                     </motion.div>
 
-                    {/* Liquid Glass Background Card */}
-                    <div
-                      className="absolute inset-0 rounded-[32px] overflow-hidden"
-                      style={{
-                        background:
-                          'linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(59,130,246,0.02) 100%)',
-                        borderTop: '1px solid rgba(255,255,255,0.3)',
-                        borderLeft: '1px solid rgba(255,255,255,0.15)',
-                        borderRight: '1px solid rgba(255,255,255,0.02)',
-                        borderBottom: '1px solid rgba(255,255,255,0.02)',
-                        backdropFilter: 'blur(35px) saturate(140%)',
-                        WebkitBackdropFilter: 'blur(35px) saturate(140%)',
-                        boxShadow:
-                          '0 40px 80px -20px rgba(0,0,0,0.6), 0 0 40px rgba(59,130,246,0.1), inset 0 1px 1px rgba(255,255,255,0.3), inset 0 -1px 1px rgba(0,0,0,0.4)',
-                      }}
-                    >
-                      {/* Organic Liquid Reflection */}
-                      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 mix-blend-overlay">
-                        <filter id="liquidNoise">
-                          <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves={3} result="noise" />
-                          <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.1 0" />
-                        </filter>
-                        <rect width="100%" height="100%" filter="url(#liquidNoise)" />
-                      </svg>
+                    {/* Premium Tech Glass Background Card */}
+                    <div className="absolute inset-0 rounded-[32px] overflow-hidden bg-gradient-to-b from-slate-900/80 to-[#0B1221]/90 backdrop-blur-2xl border border-white/10 shadow-[0_0_80px_rgba(59,130,246,0.15)]">
+                      {/* Top Glare */}
+                      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent" />
+                      
+                      {/* Bottom Glare */}
+                      <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-indigo-400/30 to-transparent" />
 
-                      {/* Shimmer line */}
+                      {/* Soft ambient inner glow */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/5 via-transparent to-cyan-400/5" />
+
+                      {/* Shimmer sweep */}
                       <motion.div
                         animate={{ left: ['-150%', '250%'] }}
                         transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut', repeatDelay: 1 }}
-                        className="absolute top-0 bottom-0 w-[80%] bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-[30deg] pointer-events-none blur-[2px]"
+                        className="absolute top-0 bottom-0 w-[50%] bg-gradient-to-r from-transparent via-blue-400/10 to-transparent -skew-x-[30deg] pointer-events-none"
                         style={{ willChange: 'transform' }}
                       />
                     </div>
 
                     {/* App Icon & Text Content */}
-                    <div className="relative px-8 md:px-10 pt-8 md:pt-10 pb-5 md:pb-6 flex flex-col items-center">
+                    <div className="relative px-5 md:px-10 pt-6 md:pt-10 pb-5 md:pb-6 flex flex-col items-center w-full">
                       <motion.div
                         animate={{ y: [0, -6, 0] }}
                         transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}
@@ -222,27 +208,36 @@ const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, isFastMode 
                         />
                       </motion.div>
 
-                      {/* Tagline — mobile-safe padding per PRD */}
-                      <motion.p
+                      {/* Premium Tagline & Badge */}
+                      <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
-                        className="text-slate-200 text-sm md:text-base text-center font-medium mt-6 md:mt-8 tracking-wide relative z-10 px-4 md:px-0 max-w-xs md:max-w-none"
-                        style={{ fontFamily: "'Outfit', 'Inter', sans-serif" }}
+                        className="mt-5 md:mt-7 relative z-10 flex flex-col items-center gap-3 md:gap-3.5 px-2 w-full"
                       >
-                        Platform Manajemen Akun Game Premium
-                      </motion.p>
+                        <h2 
+                          className="text-center font-black text-lg md:text-[22px] leading-snug bg-gradient-to-br from-white via-blue-50 to-slate-300 bg-clip-text text-transparent drop-shadow-sm max-w-[280px] md:max-w-[340px]"
+                          style={{ fontFamily: "'Outfit', sans-serif" }}
+                        >
+                          Platform Manajemen Akun Game Premium
+                        </h2>
 
-                      {/* Sub-tagline */}
-                      <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.6 }}
-                        className="text-blue-400 text-[10px] md:text-xs font-bold mt-2 tracking-widest uppercase text-center drop-shadow-lg relative z-10 px-4 md:px-0"
-                        style={{ fontFamily: "'Outfit', 'Inter', sans-serif", textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
-                      >
-                        PUSAT JUAL BELI AKUN TERPERCAYA #1
-                      </motion.p>
+                        {/* Sub-tagline Badge */}
+                        <motion.div 
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.6, delay: 0.7 }}
+                          className="inline-flex items-center justify-center gap-2 px-3.5 py-1.5 md:px-4 md:py-2 rounded-full bg-blue-900/40 border border-blue-400/40 backdrop-blur-md shadow-[0_0_20px_rgba(59,130,246,0.2)]"
+                        >
+                          <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-blue-400 animate-pulse shadow-[0_0_8px_rgba(96,165,250,1)]"></span>
+                          <span 
+                            className="text-blue-200 text-[9px] md:text-[11px] font-bold tracking-[0.2em] md:tracking-[0.25em] uppercase"
+                            style={{ fontFamily: "'Inter', sans-serif" }}
+                          >
+                            Jual Beli Terpercaya #1
+                          </span>
+                        </motion.div>
+                      </motion.div>
 
                       {/* ── CTA BUTTON ── */}
                       <AnimatePresence>
@@ -252,21 +247,20 @@ const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, isFastMode 
                             initial={{ opacity: 0, y: 22 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                            className="mt-6 md:mt-8 w-full flex justify-center"
+                            className="mt-8 md:mt-10 w-full flex justify-center"
                             style={{ willChange: 'transform, opacity' }}
                           >
-                            {/* Touch-friendly: w-full on mobile, w-auto on desktop per PRD */}
                             <motion.button
                               onClick={handleGetStarted}
-                              className="w-full max-w-[280px] md:max-w-none md:w-auto flex items-center justify-center gap-4 px-6 py-3 md:px-8 md:py-3.5 bg-[#0f172a] text-white rounded-full font-semibold border border-slate-700 hover:border-cyan-500 hover:bg-[#1e293b] transition-all duration-300 shadow-xl relative z-10 cursor-pointer"
-                              style={{ fontFamily: "'Outfit', 'Inter', sans-serif", willChange: 'transform' }}
+                              className="w-auto group flex items-center justify-center gap-3 px-5 py-2 md:px-7 md:py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-bold shadow-[0_0_15px_rgba(37,99,235,0.4)] border border-blue-400/50 hover:border-white/50 transition-all duration-300 relative overflow-hidden cursor-pointer"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                             >
-                              <span>Get Started</span>
-                              <div className="bg-blue-600 rounded-full p-2 flex items-center justify-center shadow-[0_0_14px_rgba(59,130,246,0.6)]">
-                                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none" />
+                              <span className="tracking-wide text-[12px] md:text-[14px] ml-1">Mulai Sekarang</span>
+                              <div className="bg-white/20 rounded-full p-1.5 md:p-2 flex items-center justify-center backdrop-blur-md transition-transform duration-300 group-hover:translate-x-0.5">
+                                <svg className="w-3.5 h-3.5 md:w-4 md:h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                 </svg>
                               </div>
                             </motion.button>

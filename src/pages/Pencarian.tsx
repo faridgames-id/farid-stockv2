@@ -24,7 +24,7 @@ const iconPopVariants = {
   animate: {
     scale: 1,
     rotate: 0,
-    transition: { type: 'spring', stiffness: 400, damping: 18, delay: 0.3, bounce: 0.6 },
+    transition: { type: 'spring', stiffness: 400, damping: 18, delay: 0, bounce: 0.6 },
   },
 };
 
@@ -132,28 +132,31 @@ const Pencarian: React.FC = () => {
         animate="show"
         className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4"
       >
-        <motion.div variants={itemVariants} className="flex items-center gap-3">
-          <div className="p-3 bg-blue-600/20 rounded-xl">
-            <motion.div variants={iconPopVariants} initial="initial" animate="animate">
-              <ShoppingCart className="w-6 h-6 text-blue-500" />
-            </motion.div>
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-white tracking-tight">Pesanan Request</h2>
-            <p className="text-slate-400 text-sm mt-0.5">Manajemen data pesanan pelanggan dan margin keuntungan dari reseller pihak ketiga</p>
+        <motion.div variants={itemVariants} className="flex items-center gap-2.5">
+          <motion.div 
+            initial={{ scale: 0, opacity: 0 }} 
+            animate={{ scale: 1, opacity: 1 }} 
+            transition={{ type: "spring", stiffness: 350, damping: 25, delay: 0 }} 
+            className="shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-[#0f172a] shadow-[4px_4px_10px_rgba(0,0,0,0.5),-4px_-4px_10px_rgba(255,255,255,0.03),inset_1px_1px_2px_rgba(255,255,255,0.05)] border border-slate-800 relative group"
+          >
+            <ShoppingCart className="w-6 h-6 text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)] group-hover:scale-110 transition-transform duration-300" />
+          </motion.div>
+          <div className="flex flex-col justify-center">
+            <h2 className="text-xl font-bold text-white tracking-tight leading-none">Pesanan Request</h2>
+            <p className="text-slate-400 text-sm -mt-2.5">Manajemen data pesanan pelanggan dan margin keuntungan dari reseller pihak ketiga</p>
           </div>
         </motion.div>
         
         <motion.button 
           variants={itemVariants}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.90 }}
-          transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          whileHover={{ scale: 1.02, y: -2 }}
+          whileTap={{ scale: 0.98, y: 0 }}
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 cursor-pointer text-sm hover:shadow-[0_0_20px_rgba(59,130,246,0.4)]"
+          className="group relative overflow-hidden flex items-center justify-center gap-2 bg-gradient-to-br from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 border border-blue-400/30 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all duration-300 cursor-pointer text-sm"
         >
-          <Plus className="w-4 h-4" />
-          <span>Tambah Request</span>
+          <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out"></div>
+          <Plus className="w-4 h-4 relative z-10" />
+          <span className="relative z-10">Tambah Request</span>
         </motion.button>
       </motion.div>
 
@@ -161,7 +164,7 @@ const Pencarian: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.15 }}
+        transition={{ duration: 0.4, delay: 0 }}
         className={`bg-slate-900 p-4 rounded-2xl flex flex-col md:flex-row gap-4 items-end shadow-md ${glowCard}`}
       >
         {/* Search Input */}
@@ -182,18 +185,27 @@ const Pencarian: React.FC = () => {
           {/* Game Selector */}
           <div className="space-y-1 w-full xl:w-auto">
             <label className="text-[9px] font-extrabold text-slate-500 uppercase tracking-widest block pl-0.5">GAME</label>
-            <div className="flex items-center p-1 bg-slate-800/50 border border-slate-700/80 rounded-xl overflow-x-auto hide-scrollbar">
+            <div className="flex items-center p-1 bg-slate-800/50 rounded-xl overflow-x-auto hide-scrollbar relative">
               {(['Semua', 'Free Fire', 'Mobile Legends'] as const).map((game) => (
                 <button
                   key={game}
                   type="button"
                   onClick={() => setSelectedGame(game)}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  className={`group relative px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer z-10 ${
                     selectedGame === game 
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' 
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
+                      ? 'text-white hover:-translate-y-0.5 active:translate-y-0 active:scale-95' 
+                      : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
+                  {selectedGame === game && (
+                    <motion.div
+                      layoutId="game-filter-active"
+                      className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-700 border border-blue-400/30 rounded-lg -z-10 shadow-sm overflow-hidden"
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    >
+                      <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out"></div>
+                    </motion.div>
+                  )}
                   {game === 'Semua' ? 'Semua Game' : game}
                 </button>
               ))}
@@ -203,18 +215,27 @@ const Pencarian: React.FC = () => {
           {/* Status Selector */}
           <div className="space-y-1 w-full xl:w-auto">
             <label className="text-[9px] font-extrabold text-slate-500 uppercase tracking-widest block pl-0.5">STATUS</label>
-            <div className="flex items-center p-1 bg-slate-800/50 border border-slate-700/80 rounded-xl overflow-x-auto hide-scrollbar">
+            <div className="flex items-center p-1 bg-slate-800/50 rounded-xl overflow-x-auto hide-scrollbar relative">
               {(['Semua', 'Mencari', 'Ditemukan', 'Selesai'] as const).map((status) => (
                 <button
                   key={status}
                   type="button"
                   onClick={() => setSelectedStatus(status)}
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  className={`group relative px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer z-10 ${
                     selectedStatus === status 
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30' 
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
+                      ? 'text-white hover:-translate-y-0.5 active:translate-y-0 active:scale-95' 
+                      : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
+                  {selectedStatus === status && (
+                    <motion.div
+                      layoutId="status-filter-active"
+                      className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-700 border border-blue-400/30 rounded-lg -z-10 shadow-sm overflow-hidden"
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    >
+                      <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out"></div>
+                    </motion.div>
+                  )}
                   {status === 'Semua' ? 'Semua Status' : status}
                 </button>
               ))}
@@ -229,7 +250,7 @@ const Pencarian: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        transition={{ duration: 0.5, delay: 0 }}
         className={`spotlight-effect relative group bg-slate-900 rounded-2xl overflow-hidden shadow-sm ${glowCard}`}
       >
         <div className="px-6 py-4 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center">
@@ -523,12 +544,14 @@ const Pencarian: React.FC = () => {
               >
                 Batal
               </button>
-              <button 
+              <motion.button 
+                whileHover={{ scale: 1.03, rotate: 1 }}
+                whileTap={{ scale: 0.95 }}
                 type="submit"
-                className="px-5 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-xl shadow-lg shadow-blue-600/15 active:scale-95 transition-all cursor-pointer"
+                className="px-6 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl shadow-[0_0_10px_rgba(59,130,246,0.3)] border border-blue-400/20 transition-colors cursor-pointer"
               >
-                Tambah Pesanan
-              </button>
+                Simpan Request
+              </motion.button>
             </div>
           </form>
         </div>

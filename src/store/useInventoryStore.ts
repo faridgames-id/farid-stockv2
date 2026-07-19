@@ -32,6 +32,7 @@ interface InventoryState {
   editAccount: (updatedAccount: AccountItem) => void;
   setAllAccounts: (accounts: AccountItem[]) => void;
   tambahCicilan: (id: string, jumlah: number, tanggal: string) => void;
+  resetStore: () => void;
 }
 
 export const useInventoryStore = create<InventoryState>()(
@@ -64,6 +65,7 @@ export const useInventoryStore = create<InventoryState>()(
           return acc;
         })
       })),
+      resetStore: () => set({ accounts: [] }),
     }),
     {
       name: 'inventory-storage',

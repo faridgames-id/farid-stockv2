@@ -14,6 +14,7 @@ interface JurnalState {
   addEntry: (entry: JurnalEntry) => void;
   removeEntry: (id: string) => void;
   setAllEntries: (entries: JurnalEntry[]) => void;
+  resetStore: () => void;
 }
 
 export const useJurnalStore = create<JurnalState>()(
@@ -26,6 +27,7 @@ export const useJurnalStore = create<JurnalState>()(
       }),
       removeEntry: (id) => set((state) => ({ entries: state.entries.filter((e) => e.id !== id) })),
       setAllEntries: (entries) => set({ entries }),
+      resetStore: () => set({ entries: [] }),
     }),
     {
       name: 'jurnal-storage',

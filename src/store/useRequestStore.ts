@@ -20,6 +20,7 @@ interface RequestState {
   addOrder: (order: RequestOrder) => void;
   removeOrder: (id: string) => void;
   setAllOrders: (orders: RequestOrder[]) => void;
+  resetStore: () => void;
 }
 
 export const useRequestStore = create<RequestState>()(
@@ -29,6 +30,7 @@ export const useRequestStore = create<RequestState>()(
       addOrder: (order) => set((state) => ({ orders: [order, ...state.orders] })),
       removeOrder: (id) => set((state) => ({ orders: state.orders.filter((o) => o.id !== id) })),
       setAllOrders: (orders) => set({ orders }),
+      resetStore: () => set({ orders: [] }),
     }),
     {
       name: 'request-storage',

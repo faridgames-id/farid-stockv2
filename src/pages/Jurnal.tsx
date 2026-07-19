@@ -28,14 +28,19 @@ const Jurnal: React.FC = () => {
   };
 
   return (
-    <PageMotionWrapper className="space-y-8 max-w-5xl mx-auto">
-      <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
-        <div className="p-3 bg-blue-600/20 rounded-xl">
-          <BookOpen className="w-6 h-6 text-blue-500" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Jurnal Bisnis</h2>
-          <p className="text-slate-400 text-sm mt-1">Catatan harian, evaluasi operasional, dan target bisnis</p>
+    <PageMotionWrapper className="space-y-8 pb-32 lg:pb-12">
+      <div className="flex items-center gap-2.5 border-b border-slate-800 pb-3">
+        <motion.div 
+          initial={{ rotateY: 90, opacity: 0 }} 
+          animate={{ rotateY: 0, opacity: 1 }} 
+          transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0 }} 
+          className="shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-[#0f172a] shadow-[4px_4px_10px_rgba(0,0,0,0.5),-4px_-4px_10px_rgba(255,255,255,0.03),inset_1px_1px_2px_rgba(255,255,255,0.05)] border border-slate-800 relative group"
+        >
+          <BookOpen className="w-6 h-6 text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)] group-hover:scale-110 transition-transform duration-300" />
+        </motion.div>
+        <div className="flex flex-col justify-center">
+          <h2 className="text-xl font-bold text-white tracking-tight leading-none">Jurnal Bisnis</h2>
+          <p className="text-slate-400 text-sm -mt-2.5">Catatan harian, evaluasi operasional, dan target bisnis</p>
         </div>
       </div>
 
@@ -43,7 +48,7 @@ const Jurnal: React.FC = () => {
         
         {/* Form Section */}
         <div className="lg:col-span-1">
-          <motion.div variants={itemVariants} className="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-sm sticky top-28 spotlight-effect relative overflow-hidden group">
+          <motion.div variants={itemVariants} className="bg-slate-900 rounded-2xl p-6 border border-slate-800 shadow-sm lg:sticky lg:top-28 spotlight-effect relative overflow-hidden group">
             <h3 className="text-lg font-bold text-white mb-5 flex items-center gap-2">
               <Plus className="w-5 h-5 text-blue-500" />
               Tambah Catatan Baru
@@ -88,12 +93,14 @@ const Jurnal: React.FC = () => {
                 />
               </div>
               
-              <button 
+              <motion.button 
+                whileHover={{ scale: 1.02, x: 5 }}
+                whileTap={{ scale: 0.98 }}
                 type="submit" 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg text-sm font-bold transition-colors shadow-lg shadow-blue-600/20 mt-2"
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white py-3 rounded-xl text-sm font-bold shadow-[0_0_10px_rgba(59,130,246,0.3)] border border-blue-400/20 transition-colors mt-2"
               >
                 Simpan Jurnal
-              </button>
+              </motion.button>
             </form>
           </motion.div>
         </div>

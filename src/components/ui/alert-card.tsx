@@ -59,14 +59,9 @@ const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
       visible: { opacity: 1, y: 0 },
     };
 
-    // Determine gradient based on type
-    const bgClass = type === 'error' 
-      ? "bg-gradient-to-br from-red-500 to-rose-600 text-white" 
-      : "bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 text-white"; // User requested blue gradient
-
     const defaultIcon = type === 'error' 
-      ? <AlertCircle className="h-6 w-6 text-white" />
-      : <CheckCircle2 className="h-6 w-6 text-white" />;
+      ? <AlertCircle className="h-5 w-5" />
+      : <CheckCircle2 className="h-5 w-5" />;
 
     return (
       <AnimatePresence>
@@ -74,8 +69,8 @@ const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
           <motion.div
             ref={ref}
             className={cn(
-              "relative w-full max-w-sm overflow-hidden rounded-2xl p-6 shadow-2xl pointer-events-auto",
-              bgClass,
+              "relative flex items-start gap-3 w-[320px] overflow-hidden rounded-xl p-4 pointer-events-auto",
+              "bg-[#0f172a]/95 backdrop-blur-md border border-slate-700/50 shadow-[4px_4px_12px_rgba(0,0,0,0.5),-4px_-4px_12px_rgba(255,255,255,0.02),inset_1px_1px_2px_rgba(255,255,255,0.05)]",
               className
             )}
             variants={cardVariants}
@@ -92,38 +87,41 @@ const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 rounded-full hover:bg-white/20 text-white transition-colors"
+                  className="h-6 w-6 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
                   onClick={onDismiss}
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3 w-3" />
                   <span className="sr-only">Dismiss</span>
                 </Button>
               </motion.div>
             )}
 
-            <div className="flex items-center justify-between gap-4 relative z-10 pt-1">
-              {/* Text Content */}
-              <div className="flex-1 pr-2">
-                <motion.h3 variants={itemVariants} className="text-xl font-bold tracking-tight font-['Outfit']">
-                  {title}
-                </motion.h3>
-                <motion.p variants={itemVariants} className="mt-1 text-sm text-white/90 leading-relaxed">
-                  {description}
-                </motion.p>
-              </div>
+            {/* Icon */}
+            <motion.div
+              variants={itemVariants}
+              className={cn(
+                "flex flex-shrink-0 h-12 w-12 items-center justify-center rounded-2xl backdrop-blur-xl mt-0.5 relative overflow-hidden",
+                type === 'error' 
+                  ? "bg-gradient-to-br from-red-500/40 to-red-900/10 text-red-100 border border-red-400/50 shadow-[0_0_20px_rgba(239,68,68,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)]" 
+                  : "bg-gradient-to-br from-blue-500/40 to-blue-900/10 text-blue-100 border border-blue-400/50 shadow-[0_0_20px_rgba(59,130,246,0.3),inset_0_1px_2px_rgba(255,255,255,0.4)]"
+              )}
+            >
+                <motion.div
+                  animate={{ scale: [1, 1.15, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  {icon || defaultIcon}
+                </motion.div>
+            </motion.div>
 
-              {/* Icon with a subtle pulse animation */}
-              <motion.div
-                variants={itemVariants}
-                className="flex flex-shrink-0 h-12 w-12 items-center justify-center rounded-full bg-white/20 shadow-inner mr-2 mt-1"
-              >
-                  <motion.div
-                    animate={{ scale: [1, 1.15, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    {icon || defaultIcon}
-                  </motion.div>
-              </motion.div>
+            {/* Text Content */}
+            <div className="flex-1 pr-4 pt-0.5">
+              <motion.h3 variants={itemVariants} className="text-[15px] font-bold tracking-tight text-white leading-none mb-1.5">
+                {title}
+              </motion.h3>
+              <motion.p variants={itemVariants} className="text-[13px] text-slate-300 leading-snug">
+                {description}
+              </motion.p>
             </div>
             
             {/* Action Button (Optional for normal toasts) */}

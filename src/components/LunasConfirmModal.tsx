@@ -42,34 +42,34 @@ const LunasConfirmModal: React.FC<LunasConfirmModalProps> = ({ isOpen, onClose, 
   return (
     <AnimatePresence>
       {isOpen && account && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 md:p-4 bg-slate-950/80 backdrop-blur-sm">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            className="relative w-full max-w-sm overflow-hidden rounded-3xl p-7 shadow-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white border border-blue-400/30"
+            className="relative w-[88%] max-w-[320px] sm:max-w-sm overflow-hidden rounded-3xl p-5 sm:p-7 shadow-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white border border-blue-400/30"
           >
             {/* Background Accent */}
             <div className="absolute top-0 right-0 -mt-16 -mr-16 w-48 h-48 bg-blue-400/20 rounded-full blur-3xl"></div>
 
             {/* Icon */}
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 shadow-inner shadow-white/30 mb-5 relative z-10 backdrop-blur-sm">
+            <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-white/20 shadow-inner shadow-white/30 mb-4 sm:mb-5 relative z-10 backdrop-blur-sm">
               <motion.div
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               >
-                <CheckCircle className="h-7 w-7 text-white" />
+                <CheckCircle className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
               </motion.div>
             </div>
 
             {/* Content */}
             <div className="relative z-10">
-              <h3 className="text-2xl font-bold tracking-tight mb-2 font-display">
+              <h3 className="text-xl sm:text-2xl font-bold tracking-tight mb-2 font-display">
                 Konfirmasi Lunas
               </h3>
               
-              <p className="text-sm text-blue-50/90 mb-6 leading-relaxed">
+              <p className="text-sm text-blue-50/90 mb-4 leading-relaxed">
                 Tandai akun ini sebagai Lunas? Status akun akan berubah menjadi Terjual.
               </p>
 

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import PaymentModal from '../components/PaymentModal';
 import CicilanPromptModal from '../components/CicilanPromptModal';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
@@ -11,10 +11,11 @@ import { useAppStore } from '../store/useAppStore';
 import { useInventoryStore } from '../store/useInventoryStore';
 import type { AccountItem } from '../store/useInventoryStore';
 import { useGlobalFilter } from '../hooks/useGlobalFilter';
+import FormSelect from '../components/FormSelect';
 import PageMotionWrapper, { itemVariants } from '../components/PageMotionWrapper';
 
 const StokFF: React.FC = () => {
-  const { register, handleSubmit, reset } = useForm<AccountItem>();
+  const { register, handleSubmit, reset, control } = useForm<AccountItem>();
   const { accounts, addAccount, removeAccount, editAccount } = useInventoryStore();
   const updateAccountStatus = useInventoryStore((state) => state.updateAccountStatus);
   const tambahCicilan = useInventoryStore((state) => state.tambahCicilan);
@@ -109,7 +110,7 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
   };
 
   // Edit Modal form handler
-  const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit } = useForm<AccountItem>();
+  const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit, control: controlEdit } = useForm<AccountItem>();
 
   const openEditModal = (acc: AccountItem) => {
     setEditingAccount(acc);
@@ -149,159 +150,191 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
 
   return (
     <PageMotionWrapper className="space-y-6 pb-12">
-      <motion.div variants={itemVariants} className="flex items-center gap-3 border-b border-slate-800 pb-4">
-        <div className="p-3 bg-blue-600/20 rounded-xl">
-          <Package className="w-6 h-6 text-blue-500" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">Stok Free Fire</h2>
-          <p className="text-slate-400 text-sm mt-1">Kelola inventaris dan tambah akun Free Fire</p>
+      <motion.div variants={itemVariants} className="flex items-center gap-2.5 border-b border-slate-800 pb-4">
+        <motion.div 
+          initial={{ scale: 0, opacity: 0 }} 
+          animate={{ scale: 1, opacity: 1 }} 
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          className="shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-[#0f172a] shadow-[4px_4px_10px_rgba(0,0,0,0.5),-4px_-4px_10px_rgba(255,255,255,0.03),inset_1px_1px_2px_rgba(255,255,255,0.05)] border border-slate-800 relative group"
+        >
+          <Package className="w-6 h-6 text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.7)] group-hover:scale-110 transition-transform duration-300" />
+        </motion.div>
+        <div className="flex flex-col justify-center">
+          <h2 className="text-xl font-bold text-white tracking-tight leading-none">Stok Free Fire</h2>
+          <p className="text-slate-400 text-sm -mt-2.5">Kelola inventaris dan tambah akun Free Fire</p>
         </div>
       </motion.div>
 
       {/* Input Form (Tambah Akun) */}
-      <motion.div variants={itemVariants} className="spotlight-effect relative overflow-hidden group bg-slate-900 rounded-2xl shadow-sm border border-slate-800 p-6 md:p-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-xl font-bold text-white flex items-center gap-2">
-            <PlusCircle className="w-5 h-5 text-blue-500" />
-            Input Form (Tambah Akun Free Fire)
+      <motion.div variants={itemVariants} className="spotlight-effect relative group bg-slate-900 rounded-2xl shadow-sm border border-slate-800 p-6 md:p-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+          <h2 className="font-display text-lg sm:text-xl font-bold text-white flex items-start sm:items-center gap-2.5">
+            <PlusCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5 sm:mt-0 active:rotate-180 hover:rotate-90 transition-transform duration-300 cursor-pointer" />
+            <span>Input Form (Tambah Akun Free Fire)</span>
           </h2>
-          <span className="px-3 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg text-xs font-bold uppercase tracking-wider">
+          <span className="self-start sm:self-auto px-3 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg text-xs font-bold uppercase tracking-wider shrink-0">
             FF Edition
           </span>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Spesifikasi Akun</label>
               <input 
                 type="text" 
                 {...register('spec', { required: true })}
                 placeholder="Contoh: Skin Bundle 10x" 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Rank / Level</label>
-              <select 
-                {...register('rank', { required: true })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer" 
-              >
-                <option value="">-- Pilih Rank --</option>
-                <option value="GRANDMASTER">GRANDMASTER</option>
-                <option value="HEROIC">HEROIC</option>
-                <option value="DIAMOND">DIAMOND</option>
-                <option value="PLATINUM">PLATINUM</option>
-              </select>
+              <Controller
+                name="rank"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <FormSelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    options={[
+                      { value: "GRANDMASTER", label: "GRANDMASTER" },
+                      { value: "HEROIC", label: "HEROIC" },
+                      { value: "DIAMOND", label: "DIAMOND" },
+                      { value: "PLATINUM", label: "PLATINUM" }
+                    ]}
+                    placeholder="-- Pilih Rank --"
+                    buttonClassName="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
+                  />
+                )}
+              />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Harga Beli (IDR)</label>
               <input 
                 type="number" 
                 {...register('hargaBeli', { required: true })}
                 placeholder="Rp 0" 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-bold" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-bold" 
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Harga Jual Laku (IDR)</label>
               <input 
                 type="number" 
                 {...register('hargaJual', { required: true })}
                 placeholder="Rp 0" 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-bold text-blue-400" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-bold text-blue-400" 
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Target Jual (IDR)</label>
               <input 
                 type="number" 
                 {...register('targetJual')}
                 placeholder="Rp 0" 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-bold text-blue-400" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-bold text-blue-400" 
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Nama Penjual (Seller)</label>
               <input 
                 type="text" 
                 {...register('namaPenjual', { required: true })}
                 placeholder="Contoh: Budi" 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Nama Pembeli (Buyer)</label>
               <input 
                 type="text" 
                 {...register('pembeli')}
                 placeholder="Contoh: Roni (Kosongkan jika Ready)" 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tanggal Jual (Jika Terjual)</label>
               <input 
                 type="text" 
                 {...register('tanggalJual')}
                 placeholder="Contoh: 12/06/2026 atau YYYY-MM-DD" 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Email / Akun Login</label>
               <input 
                 type="text" 
                 {...register('email', { required: true })}
                 placeholder="email@login.com / 0812..." 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Password Akun</label>
               <input 
                 type="password" 
                 {...register('password')}
                 placeholder="Password login..." 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Login Via</label>
-              <select 
-                {...register('loginVia')}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
-              >
-                <option value="">-- Pilih Login --</option>
-                <option value="Google">Google</option>
-                <option value="Facebook">Facebook</option>
-                <option value="VK">VK</option>
-                <option value="Twitter">Twitter</option>
-              </select>
+              <Controller
+                name="loginVia"
+                control={control}
+                
+                render={({ field }) => (
+                  <FormSelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    options={[
+                      { value: "Google", label: "Google" },
+                      { value: "Facebook", label: "Facebook" },
+                      { value: "VK", label: "VK" },
+                      { value: "Twitter", label: "Twitter" }
+                    ]}
+                    placeholder="-- Pilih Login --"
+                    buttonClassName="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
+                  />
+                )}
+              />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Keterangan Status</label>
-              <select 
-                {...register('status', { required: true })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
-              >
-                <option value="">-- Pilih Status --</option>
-                <option value="Ready">Ready</option>
-                <option value="Terjual">Terjual</option>
-                <option value="Cicilan">Cicilan</option>
-              </select>
+              <Controller
+                name="status"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <FormSelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    options={[
+                      { value: "Ready", label: "Ready" },
+                      { value: "Terjual", label: "Terjual" },
+                      { value: "Cicilan", label: "Cicilan" }
+                    ]}
+                    placeholder="-- Pilih Status --"
+                    buttonClassName="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
+                  />
+                )}
+              />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Merk HP / Device</label>
               <input 
                 type="text" 
                 list="device-options"
                 {...register('device', { required: true })}
                 placeholder="Pilih atau ketik sendiri..." 
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
               />
               <datalist id="device-options">
                 <option value="INFINIX HOT 60" />
@@ -315,49 +348,78 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                 <option value="LAPTOP" />
               </datalist>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Catatan Tambahan</label>
-              <select 
-                {...register('catatan')}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer" 
-              >
-                <option value="">- Kosong -</option>
-                <option value="REBIND">REBIND</option>
-                <option value="BIND 0">BIND 0</option>
-                <option value="BIND SEPAKET">BIND SEPAKET</option>
-              </select>
+              <Controller
+                name="catatan"
+                control={control}
+                
+                render={({ field }) => (
+                  <FormSelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    options={[
+                      { value: "REBIND", label: "REBIND" },
+                      { value: "BIND 0", label: "BIND 0" },
+                      { value: "BIND SEPAKET", label: "BIND SEPAKET" }
+                    ]}
+                    placeholder="- Kosong -"
+                    buttonClassName="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
+                  />
+                )}
+              />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Bulan Masuk Stok</label>
-              <select 
-                {...register('bulanMasuk', { required: true })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
-              >
-                <option value="">-- Pilih Bulan --</option>
-                {['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'].map(m => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
+              <Controller
+                name="bulanMasuk"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <FormSelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    options={[
+                      { value: "Januari", label: "Januari" },
+                      { value: "Februari", label: "Februari" },
+                      { value: "Maret", label: "Maret" },
+                      { value: "April", label: "April" },
+                      { value: "Mei", label: "Mei" },
+                      { value: "Juni", label: "Juni" },
+                      { value: "Juli", label: "Juli" },
+                      { value: "Agustus", label: "Agustus" },
+                      { value: "September", label: "September" },
+                      { value: "Oktober", label: "Oktober" },
+                      { value: "November", label: "November" },
+                      { value: "Desember", label: "Desember" }
+                    ]}
+                    placeholder="-- Pilih Bulan --"
+                    buttonClassName="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium cursor-pointer"
+                  />
+                )}
+              />
             </div>
-            <div className="space-y-2 min-w-0 w-full">
+            <div className="space-y-1.5 min-w-0 w-full">
               <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Tanggal Masuk (Opsional)</label>
               <input 
                 type="date" 
                 {...register('tanggalMasuk')}
-                className="w-full min-w-0 appearance-none bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
+                className="w-full min-w-0 appearance-none bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium" 
               />
             </div>
           </div>
           <div className="flex justify-end pt-2">
-            <button type="submit" className="w-full md:w-auto justify-center bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold shadow-md shadow-blue-500/20 transition-all active:scale-[0.98] flex items-center gap-2">
-              <CheckCircle className="w-5 h-5" /> Simpan Entri Akun FF
+            <button type="submit" className="group relative overflow-hidden w-full md:w-auto justify-center bg-gradient-to-br from-blue-500 to-blue-700 hover:from-blue-400 hover:to-blue-600 border border-blue-400/30 text-white px-8 py-3 rounded-xl font-bold shadow-sm transition-all duration-300 hover:-translate-y-1 active:translate-y-0 active:scale-95 flex items-center gap-2">
+              <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out"></div>
+              <CheckCircle className="w-5 h-5 relative z-10" /> 
+              <span className="relative z-10">Simpan Entri Akun FF</span>
             </button>
           </div>
         </form>
       </motion.div>
 
-      <motion.div variants={itemVariants} className="spotlight-effect relative overflow-hidden group bg-slate-900 rounded-2xl border border-slate-800 shadow-sm">
+      <motion.div variants={itemVariants} className="spotlight-effect relative group bg-slate-900 rounded-2xl border border-slate-800 shadow-sm">
         <div className="p-6 border-b border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <h2 className="font-display text-xl font-bold text-white flex items-center gap-2">
@@ -365,36 +427,38 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
               Inventaris Akun Free Fire
             </h2>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="relative">
+          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <div className="relative w-full sm:w-auto">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input 
                 type="text" 
                 placeholder="Cari ID, Tier, Spec, Penjual, Pembeli..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white focus:ring-1 focus:ring-blue-500 outline-none w-64" 
+                className="pl-9 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-sm text-white focus:ring-1 focus:ring-blue-500 outline-none w-full sm:w-64" 
               />
             </div>
-            <div className="flex gap-2 p-1 bg-slate-800 rounded-lg border border-slate-700 relative">
+            <div className="grid grid-cols-3 sm:flex gap-2 p-1 bg-slate-800 rounded-lg border border-slate-700 relative w-full sm:w-auto">
               {(['Ready', 'Terjual', 'Cicilan'] as const).map((tab) => (
                 <button 
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`relative z-10 px-4 py-1.5 rounded-md text-sm font-bold transition-colors ${
+                  className={`group relative z-10 w-full sm:w-auto px-4 py-1.5 rounded-md text-sm font-bold transition-colors text-center ${
                     activeTab === tab ? 'text-white' : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   {activeTab === tab && (
                     <motion.div
                       layoutId="activeTabIndicatorFF"
-                      className="absolute inset-0 bg-blue-600 rounded-md shadow-sm"
+                      className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-700 border border-blue-400/30 rounded-md shadow-sm overflow-hidden"
                       initial={false}
                       transition={{ type: "spring", stiffness: 400, damping: 30 }}
                       style={{ zIndex: -1 }}
-                    />
+                    >
+                      <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out"></div>
+                    </motion.div>
                   )}
-                  {tab}
+                  <span className="relative z-10">{tab}</span>
                 </button>
               ))}
             </div>
@@ -521,14 +585,30 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                       <div className="flex items-center justify-center gap-1.5">
                         {acc.status === 'Cicilan' ? (
                           <>
+
+                            <motion.button 
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => handleCopy(acc)}
+                              title="Salin Data Akun"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-blue-600 border border-blue-500 text-white hover:bg-blue-500 hover:shadow-[0_0_12px_rgba(59,130,246,0.5)] transition-all relative cursor-pointer"
+                            >
+                              <Copy className="w-5 h-5 sm:w-4 sm:h-4" />
+                              {copiedId === acc.id && (
+                                <span className="absolute -top-8 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded shadow-lg border border-blue-400 font-bold whitespace-nowrap animate-bounce">
+                                  Copied!
+                                </span>
+                              )}
+                            </motion.button>
+
                             <motion.button 
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               onClick={() => openEditModal(acc)}
                               title="Edit Akun"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-slate-300 hover:bg-slate-700 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-slate-300 hover:bg-slate-700 transition-all cursor-pointer"
                             >
-                              <Pencil className="w-4 h-4" />
+                              <Pencil className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
                             
                             <motion.button 
@@ -536,9 +616,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => setPaymentModalAccount(acc)}
                               title="Bayar Cicilan"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-green-400 hover:bg-green-500/20 hover:border-green-500/50 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-green-400 hover:bg-green-500/20 hover:border-green-500/50 transition-all cursor-pointer"
                             >
-                              <DollarSign className="w-4 h-4" />
+                              <DollarSign className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
 
                             <motion.button 
@@ -546,9 +626,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => setLunasPromptAccount(acc)}
                               title="Tandai Ready (Selesai Cicilan)"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-green-500 border border-green-400 text-white hover:bg-green-400 hover:shadow-[0_0_12px_rgba(34,197,94,0.5)] transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-green-500 border border-green-400 text-white hover:bg-green-400 hover:shadow-[0_0_12px_rgba(34,197,94,0.5)] transition-all cursor-pointer"
                             >
-                              <CheckCircle className="w-4 h-4" />
+                              <CheckCircle className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
 
                             <motion.button 
@@ -556,9 +636,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => setDeletePromptAccount(acc)}
                               title="Hapus Akun"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-slate-400 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-slate-400 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 transition-all cursor-pointer"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
                           </>
                         ) : acc.status === 'Terjual' ? (
@@ -568,9 +648,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => openEditModal(acc)}
                               title="Edit Akun"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/50 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/50 transition-all cursor-pointer"
                             >
-                              <Pencil className="w-4 h-4" />
+                              <Pencil className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
                             
                             <motion.button 
@@ -578,9 +658,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => setSellPromptAccount(acc)}
                               title="Edit Penjualan"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/50 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 hover:border-emerald-500/50 transition-all cursor-pointer"
                             >
-                              <DollarSign className="w-4 h-4" />
+                              <DollarSign className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
 
                             <motion.button 
@@ -588,9 +668,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => setDeletePromptAccount(acc)}
                               title="Hapus Akun"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-slate-400 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-slate-400 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 transition-all cursor-pointer"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
                           </>
                         ) : (
@@ -600,9 +680,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => handleCopy(acc)}
                               title="Salin Data Akun"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 border border-blue-500 text-white hover:bg-blue-500 hover:shadow-[0_0_12px_rgba(59,130,246,0.5)] transition-all relative cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-blue-600 border border-blue-500 text-white hover:bg-blue-500 hover:shadow-[0_0_12px_rgba(59,130,246,0.5)] transition-all relative cursor-pointer"
                             >
-                              <Copy className="w-4 h-4" />
+                              <Copy className="w-5 h-5 sm:w-4 sm:h-4" />
                               {copiedId === acc.id && (
                                 <span className="absolute -top-8 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded shadow-lg border border-blue-400 font-bold whitespace-nowrap animate-bounce">
                                   Copied!
@@ -615,9 +695,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => setDeletePromptAccount(acc)}
                               title="Hapus Akun"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/50 transition-all cursor-pointer"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
 
                             <motion.button 
@@ -625,9 +705,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => setCalendarEditingAccount(acc)}
                               title="Ubah Tanggal Masuk"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/50 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/50 transition-all cursor-pointer"
                             >
-                              <Calendar className="w-4 h-4" />
+                              <Calendar className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
 
                             <motion.button 
@@ -635,9 +715,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => openEditModal(acc)}
                               title="Edit Akun"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/50 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/50 transition-all cursor-pointer"
                             >
-                              <Pencil className="w-4 h-4" />
+                              <Pencil className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
                             
                             <motion.button 
@@ -645,9 +725,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => setSellPromptAccount(acc)}
                               title="Tandai Terjual"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/50 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/50 transition-all cursor-pointer"
                             >
-                              <DollarSign className="w-4 h-4" />
+                              <DollarSign className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
 
                             <motion.button 
@@ -655,9 +735,9 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                               whileTap={{ scale: 0.9 }}
                               onClick={() => setCicilanPromptAccount(acc)}
                               title="Tandai Cicilan"
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/50 transition-all cursor-pointer"
+                              className="w-10 h-10 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg bg-slate-800/80 border border-slate-700/80 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 hover:border-blue-500/50 transition-all cursor-pointer"
                             >
-                              <CreditCard className="w-4 h-4" />
+                              <CreditCard className="w-5 h-5 sm:w-4 sm:h-4" />
                             </motion.button>
                           </>
                         )}
@@ -678,24 +758,24 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
 
       <AnimatePresence>
         {editingAccount && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 md:p-4 bg-slate-950/80 backdrop-blur-sm">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="relative w-full max-w-3xl overflow-hidden rounded-3xl p-6 md:p-8 shadow-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white border border-blue-400/30 overflow-y-auto max-h-[90vh]"
+              className="relative w-full max-w-2xl rounded-2xl md:rounded-3xl p-7 shadow-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white border border-blue-400/30 overflow-y-auto overflow-x-hidden max-h-[85vh]"
             >
               {/* Background Accent */}
               <div className="absolute top-0 right-0 -mt-32 -mr-32 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl pointer-events-none"></div>
 
               {/* Icon */}
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 shadow-inner shadow-white/30 mb-6 relative z-10 backdrop-blur-sm">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 shadow-inner shadow-white/30 mb-5 relative z-10 backdrop-blur-sm">
                 <motion.div
                   animate={{ y: [-2, 2, -2] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <Pencil className="h-7 w-7 text-white" />
+                  <Pencil className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
                 </motion.div>
               </div>
               
@@ -708,12 +788,12 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
               </button>
 
               <div className="relative z-10">
-                <h3 className="text-2xl font-bold tracking-tight mb-8 font-display">
+                <h3 className="text-xl font-bold tracking-tight mb-4 font-display">
                   Edit Akun <span className="text-blue-200 text-lg ml-2">{editingAccount.id}</span>
                 </h3>
 
-              <form onSubmit={handleSubmitEdit(onEditSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form onSubmit={handleSubmitEdit(onEditSubmit)} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="block text-[10px] font-bold text-blue-200 uppercase tracking-wider mb-1.5 ml-1">Spesifikasi Akun</label>
                     <input 
@@ -724,16 +804,25 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                   </div>
                   <div className="space-y-1.5">
                     <label className="block text-[10px] font-bold text-blue-200 uppercase tracking-wider mb-1.5 ml-1">Rank / Level</label>
-                    <select 
-                      {...registerEdit('rank', { required: true })}
-                      className="w-full bg-blue-900/40 border border-blue-400/40 rounded-xl px-4 py-3 text-white focus:outline-none focus:bg-blue-900/60 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all font-medium text-sm shadow-inner cursor-pointer" 
-                    >
-                      <option value="">-- Pilih Rank --</option>
-                      <option value="GRANDMASTER">GRANDMASTER</option>
-                      <option value="HEROIC">HEROIC</option>
-                      <option value="DIAMOND">DIAMOND</option>
-                      <option value="PLATINUM">PLATINUM</option>
-                    </select>
+                    <Controller
+                name="rank"
+                control={controlEdit}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <FormSelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    options={[
+                      { value: "GRANDMASTER", label: "GRANDMASTER" },
+                      { value: "HEROIC", label: "HEROIC" },
+                      { value: "DIAMOND", label: "DIAMOND" },
+                      { value: "PLATINUM", label: "PLATINUM" }
+                    ]}
+                    placeholder="-- Pilih Rank --"
+                    buttonClassName="w-full bg-blue-900/40 border border-blue-400/40 rounded-xl px-4 py-3 text-white focus:outline-none focus:bg-blue-900/60 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all font-medium text-sm shadow-inner cursor-pointer"
+                  />
+                )}
+              />
                   </div>
                   <div className="space-y-1.5">
                     <label className="block text-[10px] font-bold text-blue-200 uppercase tracking-wider mb-1.5 ml-1">Harga Beli (IDR)</label>
@@ -802,27 +891,46 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                   </div>
                   <div className="space-y-1.5">
                     <label className="block text-[10px] font-bold text-blue-200 uppercase tracking-wider mb-1.5 ml-1">Login Via</label>
-                    <select 
-                      {...registerEdit('loginVia')}
-                      className="w-full bg-blue-900/40 border border-blue-400/40 rounded-xl px-4 py-3 text-white focus:outline-none focus:bg-blue-900/60 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all font-medium text-sm shadow-inner cursor-pointer"
-                    >
-                      <option value="">-- Pilih Login --</option>
-                      <option value="Google">Google</option>
-                      <option value="Facebook">Facebook</option>
-                      <option value="VK">VK</option>
-                      <option value="Twitter">Twitter</option>
-                    </select>
+                    <Controller
+                name="loginVia"
+                control={controlEdit}
+                
+                render={({ field }) => (
+                  <FormSelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    options={[
+                      { value: "Google", label: "Google" },
+                      { value: "Facebook", label: "Facebook" },
+                      { value: "VK", label: "VK" },
+                      { value: "Twitter", label: "Twitter" }
+                    ]}
+                    placeholder="-- Pilih Login --"
+                    buttonClassName="w-full bg-blue-900/40 border border-blue-400/40 rounded-xl px-4 py-3 text-white focus:outline-none focus:bg-blue-900/60 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all font-medium text-sm shadow-inner cursor-pointer"
+                  />
+                )}
+              />
                   </div>
                   <div className="space-y-1.5">
                     <label className="block text-[10px] font-bold text-blue-200 uppercase tracking-wider mb-1.5 ml-1">Status</label>
-                    <select 
-                      {...registerEdit('status', { required: true })}
-                      className="w-full bg-blue-900/40 border border-blue-400/40 rounded-xl px-4 py-3 text-white focus:outline-none focus:bg-blue-900/60 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all font-medium text-sm shadow-inner cursor-pointer"
-                    >
-                      <option value="Ready">Ready</option>
-                      <option value="Terjual">Terjual</option>
-                      <option value="Cicilan">Cicilan</option>
-                    </select>
+                    <Controller
+                name="status"
+                control={controlEdit}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <FormSelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    options={[
+                      { value: "Ready", label: "Ready" },
+                      { value: "Terjual", label: "Terjual" },
+                      { value: "Cicilan", label: "Cicilan" }
+                    ]}
+                    placeholder="-- Pilih --"
+                    buttonClassName="w-full bg-blue-900/40 border border-blue-400/40 rounded-xl px-4 py-3 text-white focus:outline-none focus:bg-blue-900/60 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all font-medium text-sm shadow-inner cursor-pointer"
+                  />
+                )}
+              />
                   </div>
                   <div className="space-y-1.5">
                     <label className="block text-[10px] font-bold text-blue-200 uppercase tracking-wider mb-1.5 ml-1">Merk HP / Device</label>
@@ -847,15 +955,24 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
                   </div>
                   <div className="space-y-1.5">
                     <label className="block text-[10px] font-bold text-blue-200 uppercase tracking-wider mb-1.5 ml-1">Catatan</label>
-                    <select 
-                      {...registerEdit('catatan')}
-                      className="w-full bg-blue-900/40 border border-blue-400/40 rounded-xl px-4 py-3 text-white focus:outline-none focus:bg-blue-900/60 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all font-medium text-sm shadow-inner cursor-pointer" 
-                    >
-                      <option value="">- Kosong -</option>
-                      <option value="REBIND">REBIND</option>
-                      <option value="BIND 0">BIND 0</option>
-                      <option value="BIND SEPAKET">BIND SEPAKET</option>
-                    </select>
+                    <Controller
+                name="catatan"
+                control={controlEdit}
+                
+                render={({ field }) => (
+                  <FormSelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    options={[
+                      { value: "REBIND", label: "REBIND" },
+                      { value: "BIND 0", label: "BIND 0" },
+                      { value: "BIND SEPAKET", label: "BIND SEPAKET" }
+                    ]}
+                    placeholder="- Kosong -"
+                    buttonClassName="w-full bg-blue-900/40 border border-blue-400/40 rounded-xl px-4 py-3 text-white focus:outline-none focus:bg-blue-900/60 focus:border-blue-300 focus:ring-1 focus:ring-blue-300 transition-all font-medium text-sm shadow-inner cursor-pointer"
+                  />
+                )}
+              />
                   </div>
                 </div>
 
@@ -883,30 +1000,30 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
 
       <AnimatePresence>
         {calendarEditingAccount && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 md:p-4 bg-slate-950/80 backdrop-blur-sm">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              className="relative w-full max-w-sm overflow-hidden rounded-3xl p-7 shadow-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white border border-blue-400/30"
+              className="relative w-[88%] max-w-[320px] sm:max-w-sm overflow-hidden rounded-3xl p-5 sm:p-7 shadow-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white border border-blue-400/30"
             >
               {/* Background Accent */}
               <div className="absolute top-0 right-0 -mt-16 -mr-16 w-48 h-48 bg-blue-400/20 rounded-full blur-3xl"></div>
 
               {/* Icon */}
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 shadow-inner shadow-white/30 mb-5 relative z-10 backdrop-blur-sm">
+              <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-white/20 shadow-inner shadow-white/30 mb-4 sm:mb-5 relative z-10 backdrop-blur-sm">
                 <motion.div
                   animate={{ y: [-2, 2, -2] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <Calendar className="h-7 w-7 text-white" />
+                  <Calendar className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
                 </motion.div>
               </div>
 
               {/* Content */}
               <div className="relative z-10">
-                <h3 className="text-2xl font-bold tracking-tight mb-6 font-display">
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight mb-5 sm:mb-6 font-display">
                   Ubah Tanggal Masuk
                 </h3>
 
