@@ -158,7 +158,7 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
         </motion.div>
         <div className="flex flex-col justify-center pt-1">
           <h2 className="text-xl font-bold text-white tracking-tight leading-none">Stok Mobile Legends</h2>
-          <p className="text-slate-400 text-sm mt-0.5">Kelola inventaris dan tambah akun Mobile Legends</p>
+          <p className="text-slate-400 text-sm -mt-1 leading-tight">Kelola inventaris dan tambah akun Mobile Legends</p>
         </div>
       </motion.div>
 

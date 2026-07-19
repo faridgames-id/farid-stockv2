@@ -203,7 +203,7 @@ const Statistik: React.FC = () => {
           </motion.div>
           <div className="flex flex-col justify-center pt-1">
             <h2 className="text-xl font-bold text-white tracking-tight leading-none">Sales Report</h2>
-            <p className="text-slate-400 text-sm mt-0.5">Pemantauan performa inventaris dan ringkasan finansial</p>
+            <p className="text-slate-400 text-sm -mt-1 leading-tight">Pemantauan performa inventaris dan ringkasan finansial</p>
           </div>
         </div>
 

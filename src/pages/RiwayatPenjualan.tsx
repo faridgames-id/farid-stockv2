@@ -33,7 +33,7 @@ const RiwayatPenjualan: React.FC = () => {
         </motion.div>
         <div className="flex flex-col justify-center pt-1">
           <h2 className="text-xl font-bold text-white tracking-tight leading-none">Riwayat Penjualan</h2>
-          <p className="text-slate-400 text-sm mt-0.5">Laporan pembukuan seluruh akun yang laku terjual</p>
+          <p className="text-slate-400 text-sm -mt-1 leading-tight">Laporan pembukuan seluruh akun yang laku terjual</p>
         </div>
       </div>
 

@@ -41,7 +41,7 @@ const Wishlist: React.FC = () => {
           </motion.div>
           <div className="flex flex-col justify-center pt-1">
             <h2 className="text-xl font-bold text-white tracking-tight leading-none">Wishlist Expansi</h2>
-            <p className="text-slate-400 text-sm mt-0.5">Kelola daftar kebutuhan untuk ekspansi bisnis</p>
+            <p className="text-slate-400 text-sm -mt-1 leading-tight">Kelola daftar kebutuhan untuk ekspansi bisnis</p>
           </div>
         </div>
       </div>
