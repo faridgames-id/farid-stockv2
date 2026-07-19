@@ -169,7 +169,7 @@ Farid Shop Game ©️ 2026 | Safe - Fast - Trusted`;
       <motion.div variants={itemVariants} className="spotlight-effect relative group bg-slate-900 rounded-2xl shadow-sm border border-slate-800 p-6 md:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <h2 className="font-display text-lg sm:text-xl font-bold text-white flex items-start sm:items-center gap-2.5">
-            <PlusCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5 sm:mt-0 active:rotate-180 hover:rotate-90 transition-transform duration-300 cursor-pointer" />
+            <PlusCircle className="w-5 h-5 text-blue-500 shrink-0 mt-1 sm:mt-0 active:rotate-180 hover:rotate-90 transition-transform duration-300 cursor-pointer" />
             <span>Input Form (Tambah Akun Free Fire)</span>
           </h2>
           <span className="self-start sm:self-auto px-3 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg text-xs font-bold uppercase tracking-wider shrink-0">
