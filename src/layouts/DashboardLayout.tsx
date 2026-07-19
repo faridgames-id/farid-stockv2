@@ -127,6 +127,16 @@ const DashboardLayout: React.FC = () => {
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
 
   // Scroll state for hiding bottom nav
   const [isScrollingDown, setIsScrollingDown] = useState(false);
@@ -993,9 +1003,20 @@ const DashboardLayout: React.FC = () => {
 
               <div className="flex flex-col gap-2.5 sm:gap-3">
                 <button 
-                  onClick={() => {
+                  onClick={async () => {
                     setIsInstallModalOpen(false);
-                    toast.success('Memulai proses instalasi aplikasi...');
+                    if (deferredPrompt) {
+                      deferredPrompt.prompt();
+                      const { outcome } = await deferredPrompt.userChoice;
+                      if (outcome === 'accepted') {
+                        toast.success('Aplikasi berhasil diinstal!');
+                      } else {
+                        toast.error('Instalasi dibatalkan.');
+                      }
+                      setDeferredPrompt(null);
+                    } else {
+                      toast.info('Instalasi otomatis tidak tersedia. Gunakan menu Install App di browser Anda.');
+                    }
                   }}
                   className="w-full py-3 sm:py-3.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 shadow-lg border border-blue-400/50 text-white rounded-[14px] sm:rounded-[20px] text-[13px] sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer transition-all hover:scale-[1.02] active:scale-95"
                 >
