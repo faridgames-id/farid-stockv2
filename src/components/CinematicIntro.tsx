@@ -201,7 +201,7 @@ const CinematicIntro: React.FC<CinematicIntroProps> = ({ onComplete, isFastMode 
                         {/* Glow behind icon */}
                         <div className="absolute inset-0 rounded-[26px] blur-2xl bg-blue-500/50 scale-110" />
                         <img
-                          src="/logo.jpg"
+                          src="/farid.png"
                           alt="FRD Logo"
                           className="relative w-20 h-20 md:w-32 md:h-32 rounded-[26px] shadow-2xl object-cover"
                           style={{ boxShadow: '0 8px 40px rgba(59,130,246,0.6), 0 0 0 1px rgba(255,255,255,0.2)' }}

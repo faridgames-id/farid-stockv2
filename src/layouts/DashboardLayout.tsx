@@ -347,7 +347,7 @@ const DashboardLayout: React.FC = () => {
             <div className="h-20 flex items-center justify-between px-6 border-b border-slate-100 group/logo">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-10 h-10 rounded-xl shrink-0 relative overflow-hidden">
-                  <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
+                  <img src="/farid.png" alt="Logo" className="w-full h-full object-cover" />
                   {/* Clean overlay */}
                   <div className="absolute inset-0 rounded-xl pointer-events-none z-10"></div>
                   {/* Shimmer effect */}

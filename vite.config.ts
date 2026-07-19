@@ -21,15 +21,15 @@ export default defineConfig({
         start_url: "/",
         icons: [
           {
-            src: "/farid.jpg",
+            src: "/farid.png",
             sizes: "192x192",
-            type: "image/jpeg",
+            type: "image/png",
             purpose: "any maskable"
           },
           {
-            src: "/farid.jpg",
+            src: "/farid.png",
             sizes: "512x512",
-            type: "image/jpeg",
+            type: "image/png",
             purpose: "any maskable"
           }
         ]
