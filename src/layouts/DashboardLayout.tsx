@@ -480,6 +480,28 @@ const DashboardLayout: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* Cloud Sync for Mobile (Inside Profile Popover) */}
+                  {isLoggedIn && (
+                    <div className="flex items-center gap-2 mb-3">
+                      <button 
+                        onClick={handleCloudFetch}
+                        disabled={isSyncing}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-[11px] font-bold transition-all border border-emerald-200 shadow-sm disabled:opacity-70"
+                      >
+                        <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+                        <span>Tarik Data</span>
+                      </button>
+                      <button 
+                        onClick={handleCloudSync}
+                        disabled={isSyncing}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-[11px] font-bold transition-all border border-blue-200 shadow-sm disabled:opacity-70"
+                      >
+                        <Cloud className={`w-3.5 h-3.5 ${isSyncing ? 'animate-bounce' : ''}`} />
+                        <span>Simpan Data</span>
+                      </button>
+                    </div>
+                  )}
+
                   {isLoggedIn && (
                     <button 
                       onClick={async () => {
