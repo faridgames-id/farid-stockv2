@@ -311,6 +311,27 @@ const DashboardLayout: React.FC = () => {
     setSyncing(false);
   };
 
+  const handleCloudFetch = async () => {
+    if (!isLoggedIn || !userId) {
+      toast.error('Gagal memulihkan: Anda harus login terlebih dahulu!');
+      return;
+    }
+    
+    setSyncing(true);
+    try {
+      const { fetchFromCloud } = await import('../lib/firebaseSync');
+      const hasData = await fetchFromCloud(userId);
+      if (hasData) {
+        toast.success('Data berhasil dipulihkan dari Cloud!');
+      } else {
+        toast.error('Tidak ada data di Cloud untuk akun ini.');
+      }
+    } catch (e) {
+      toast.error('Gagal mengambil data dari Cloud.');
+    }
+    setSyncing(false);
+  };
+
   const renderView = () => {
     switch (currentView) {
       case 'dashboard': return <LazyLoader><Dashboard /></LazyLoader>;
@@ -675,17 +696,30 @@ const DashboardLayout: React.FC = () => {
                   Tersimpan: {lastSynced}
                 </span>
               </div>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.90 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                onClick={handleCloudSync}
-                disabled={isSyncing}
-                className="min-h-[40px] min-w-[40px] flex items-center justify-center bg-blue-600 hover:bg-blue-500 hover:shadow-[0_0_12px_rgba(37,99,235,0.4)] text-white rounded-xl transition-colors shadow-md shadow-blue-900/20 disabled:opacity-70 cursor-pointer"
-                title="Simpan ke Cloud"
-              >
-                <Cloud className={`w-4 h-4 ${isSyncing ? 'animate-bounce' : ''}`} />
-              </motion.button>
+              <div className="flex gap-1.5">
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.90 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  onClick={handleCloudFetch}
+                  disabled={isSyncing}
+                  className="min-h-[40px] min-w-[40px] flex items-center justify-center bg-emerald-600 hover:bg-emerald-500 hover:shadow-[0_0_12px_rgba(16,185,129,0.4)] text-white rounded-xl transition-colors shadow-md shadow-emerald-900/20 disabled:opacity-70 cursor-pointer"
+                  title="Tarik Data dari Cloud"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                </motion.button>
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.90 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  onClick={handleCloudSync}
+                  disabled={isSyncing}
+                  className="min-h-[40px] min-w-[40px] flex items-center justify-center bg-blue-600 hover:bg-blue-500 hover:shadow-[0_0_12px_rgba(37,99,235,0.4)] text-white rounded-xl transition-colors shadow-md shadow-blue-900/20 disabled:opacity-70 cursor-pointer"
+                  title="Simpan ke Cloud"
+                >
+                  <Cloud className={`w-4 h-4 ${isSyncing ? 'animate-bounce' : ''}`} />
+                </motion.button>
+              </div>
               <div className="flex gap-1.5">
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
