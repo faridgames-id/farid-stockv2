@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { signInWithPopup, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/firebase';
-import { syncToCloud } from '../lib/firebaseSync';
+import { syncToCloud, fetchFromCloud } from '../lib/firebaseSync';
 import { useAppStore, type AppView } from '../store/useAppStore';
 import { useInventoryStore } from '../store/useInventoryStore';
 import { useWishlistStore } from '../store/useWishlistStore';
@@ -319,15 +319,14 @@ const DashboardLayout: React.FC = () => {
     
     setSyncing(true);
     try {
-      const { fetchFromCloud } = await import('../lib/firebaseSync');
       const hasData = await fetchFromCloud(userId);
       if (hasData) {
         toast.success('Data berhasil dipulihkan dari Cloud!');
       } else {
         toast.error('Tidak ada data di Cloud untuk akun ini.');
       }
-    } catch (e) {
-      toast.error('Gagal mengambil data dari Cloud.');
+    } catch (e: any) {
+      toast.error('Gagal mengambil data dari Cloud: ' + (e?.message || 'Error tidak diketahui'));
     }
     setSyncing(false);
   };
