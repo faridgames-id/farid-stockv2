@@ -45,6 +45,6 @@ export const fetchFromCloud = async (uid: string) => {
     return false;
   } catch (error) {
     console.error("Error fetching from cloud: ", error);
-    return false;
+    throw error;
   }
 };

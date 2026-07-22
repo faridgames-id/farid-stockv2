@@ -37,7 +37,14 @@ function App() {
         });
 
         // Fetch data from cloud automatically upon login
-        await fetchFromCloud(user.uid);
+        try {
+          const hasData = await fetchFromCloud(user.uid);
+          if (hasData) {
+            toast.success("Data berhasil dipulihkan dari Cloud!");
+          }
+        } catch (error) {
+          toast.error("Gagal memulihkan data dari Cloud, periksa koneksi internet.");
+        }
       } else {
         clearUser();
         
@@ -64,6 +71,17 @@ function App() {
     let syncTimeout: NodeJS.Timeout;
     
     const triggerSync = () => {
+      // Mencegah auto-sync jika data kosong semua untuk menghindari terhapusnya data di Cloud 
+      // saat login di device baru (dimana localStorage masih kosong)
+      const accounts = useInventoryStore.getState().accounts;
+      const wishlist = useWishlistStore.getState().items;
+      const jurnal = useJurnalStore.getState().entries;
+      const requests = useRequestStore.getState().orders;
+      
+      if (accounts.length === 0 && wishlist.length === 0 && jurnal.length === 0 && requests.length === 0) {
+        return;
+      }
+
       clearTimeout(syncTimeout);
       syncTimeout = setTimeout(() => {
         syncToCloud(userId);
